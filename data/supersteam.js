@@ -1314,19 +1314,27 @@ function add_community_profile_links() {
     			break;
     	}
 
-    	var htmlstr = '';
-    	htmlstr += '<div class="profile_count_link"><a href="http://steamrep.com/profiles/' + steamID + '" target="_blank"><span class="count_link_label">SteamRep</span>&nbsp;<span class="profile_count_link_total">';
-    	if (showprofilelinks_display != 2) { htmlstr += '<img src="' + ico_steamrep + '" class="profile_link_icon">'; }
-    	htmlstr += '<div class="profile_count_link"><a href="http://steamdb.info/calculator/?player=' + steamID + '" target="_blank"><span class="count_link_label">SteamDB</span>&nbsp;<span class="profile_count_link_total">';
-    	if (showprofilelinks_display != 2) { htmlstr += '<img src="' + ico_steamdb + '" class="profile_link_icon">'; }
-    	htmlstr += '<div class="profile_count_link"><a href="http://www.steamgifts.com/go/user/' + steamID + '" target="_blank"><span class="count_link_label">SteamGifts</span>&nbsp;<span class="profile_count_link_total">';
-    	if (showprofilelinks_display != 2) { htmlstr += '<img src="' + ico_steamgifts + '" class="profile_link_icon">'; }
-    	htmlstr += '<div class="profile_count_link"><a href="http://www.achievementstats.com/index.php?action=profile&playerId=' + steamID + '" target="_blank"><span class="count_link_label">Achievement Stats</span>&nbsp;<span class="profile_count_link_total">';
-    	if (showprofilelinks_display != 2) { htmlstr += '<img src="' + ico_achievementstats + '" class="profile_link_icon">'; }
-    	htmlstr += '<div class="profile_count_link"><a href="http://backpack.tf/profiles/' + steamID + '" target="_blank"><span class="count_link_label">Backpack.tf</span>&nbsp;<span class="profile_count_link_total">';
-    	if (showprofilelinks_display != 2) { htmlstr += '<img src="' + ico_backpacktf + '" class="profile_link_icon">'; }
-    	htmlstr += '<div class="profile_count_link"><a href="http://astats.astats.nl/astats/User_Info.php?steamID64=' + steamID + '" target="_blank"><span class="count_link_label">AStats.nl</span>&nbsp;<span class="profile_count_link_total">';
-    	if (showprofilelinks_display != 2) { htmlstr += '<img src="' + ico_astats + '" class="profile_link_icon">'; }
+		var htmlstr = '';
+		htmlstr += '<div class="profile_count_link"><a href="http://steamrep.com/profiles/' + steamID + '" target="_blank"><span class="count_link_label">SteamRep</span>&nbsp;<span class="profile_count_link_total">';
+		if (showprofilelinks_display != 2) { htmlstr += '<img src="' + ico_steamrep + '" class="profile_link_icon">'; } else {htmlstr += '&nbsp;';}
+		htmlstr += '</span></a></div>';
+		htmlstr += '<div class="profile_count_link"><a href="http://steamdb.info/calculator/?player=' + steamID + '" target="_blank"><span class="count_link_label">SteamDB</span>&nbsp;<span class="profile_count_link_total">';
+		if (showprofilelinks_display != 2) { htmlstr += '<img src="' + ico_steamdb + '" class="profile_link_icon">'; }else {htmlstr += '&nbsp;';}
+		htmlstr += '</span></a></div>';
+		htmlstr += '<div class="profile_count_link"><a href="http://www.steamgifts.com/go/user/' + steamID + '" target="_blank"><span class="count_link_label">SteamGifts</span>&nbsp;<span class="profile_count_link_total">';
+		if (showprofilelinks_display != 2) { htmlstr += '<img src="' + ico_steamgifts + '" class="profile_link_icon">'; }else {htmlstr += '&nbsp;';}
+		htmlstr += '</span></a></div>';
+		htmlstr += '<div class="profile_count_link"><a href="http://www.achievementstats.com/index.php?action=profile&playerId=' + steamID + '" target="_blank"><span class="count_link_label">Achievement Stats</span>&nbsp;<span class="profile_count_link_total">';
+		if (showprofilelinks_display != 2) { htmlstr += '<img src="' + ico_achievementstats + '" class="profile_link_icon">'; }else {htmlstr += '&nbsp;';}
+		htmlstr += '</span></a></div>';
+		htmlstr += '<div class="profile_count_link"><a href="http://backpack.tf/profiles/' + steamID + '" target="_blank"><span class="count_link_label">Backpack.tf</span>&nbsp;<span class="profile_count_link_total">';
+		if (showprofilelinks_display != 2) { htmlstr += '<img src="' + ico_backpacktf + '" class="profile_link_icon">'; }else {htmlstr += '&nbsp;';}
+		htmlstr += '</span></a></div>';
+		htmlstr += '<div class="profile_count_link"><a href="http://astats.astats.nl/astats/User_Info.php?steamID64=' + steamID + '" target="_blank"><span class="count_link_label">AStats.nl</span>&nbsp;<span class="profile_count_link_total">';
+		if (showprofilelinks_display != 2) { htmlstr += '<img src="' + ico_astats + '" class="profile_link_icon">'; }else {htmlstr += '&nbsp;';}
+		htmlstr += '</span></a></div>';
+		htmlstr += "<div class=\"profile_count_link\" id=\"es_permalink_div\"><span id=\"es_permalink_text\">"+localized_strings[language].permalink+"</span><input type=\"text\" id=\"es_permalink\" value=\"" + window.location.protocol + "//steamcommunity.com/profiles/"+steamID+"\" readonly></div>";
+
     	if (htmlstr != '') { $(".profile_item_links").append(htmlstr); }
 
     	if ($(".profile_item_links").length == 0) {
@@ -3851,8 +3859,11 @@ function process_early_access() {
 						$(".leftcol").each(function(index, value) { check_early_access($(this), "ea_184x69.png", $(this).position().left + 8); });
 						break;
 					case /^\/(?:id|profiles)\/.+/.test(window.location.pathname):
-						$(".game_info_cap").each(function(index, value) { check_early_access($(this), "ea_184x69.png", 0); });
-						$(".showcase_slot").each(function(index, value) { check_early_access($(this), "ea_184x69.png", 0); });
+						//need to add a container for the es images on the profile page as well as move the styling abit
+						//also need to add styling on the container for the positioning to work properly on the container
+						//and the image contained inside of it
+						$(".game_info_cap").each(function(index, value) { check_early_access($(this), "ea_sm_120.png", 0); });
+						$(".showcase_slot").each(function(index, value) { check_early_access($(this), "ea_sm_120.png", 0); });
 						break;
 					case /^\/app\/.*/.test(window.location.pathname):
 						if ($(".apphub_EarlyAccess_Title").length > 0) {
@@ -4851,7 +4862,7 @@ function add_achievement_sort() {
 	if ($("#personalAchieve").length > 0 || $("#achievementsSelector").length > 0) {
 		if (language == "eng") {
 			$("#tabs").before("<div id='achievement_sort_options' class='sort_options'>" + localized_strings[language].sort_by + "<span id='achievement_sort_default'>" + localized_strings[language].theworddefault + "</span><span id='achievement_sort_date' class='es_achievement_sort_link'>" + localized_strings[language].date_unlocked + "</span></div>");
-			$("#personalAchieve, #achievementsSelector").clone().insertAfter("#personalAchieve, #achievementsSelector").attr("id", "personalAchieveSorted").css("padding-left", "16px").hide();	
+			$("#personalAchieve, #achievementsSelector").clone().insertAfter("#personalAchieve, #achievementsSelector").attr("id", "personalAchieveSorted").hide();
 
 			var achRows = [];
 			$("#personalAchieveSorted").find(".achieveUnlockTime").each(function() {
@@ -4861,6 +4872,7 @@ function add_achievement_sort() {
 				$(this).parent().parent().next().remove();
 				$(this).parent().parent().next().remove();
 				push[1] = $(this).parent().parent();
+				$(this).parent().parent().parent().remove();
 				var unlocktime = $(this).text().trim().replace(/^.+\: /, "").replace(/jan/i, "01").replace(/feb/i, "02").replace(/mar/i, "03").replace(/apr/i, "04").replace(/may/i, "05").replace(/jun/i, "06").replace(/jul/i, "07").replace(/aug/i, "08").replace(/sep/i, "09").replace(/oct/i, "10").replace(/nov/i, "11").replace(/dec/i, "12");
 				var year = new Date().getFullYear();
 				if ($(this).text().replace(/^.+\: /, "").match(/^\d/)) {
@@ -4883,16 +4895,10 @@ function add_achievement_sort() {
 
 			achRows.sort();
 
-			$(achRows).each(function() {		
-				if ($(".smallForm").length > 0) {
-					$("#personalAchieveSorted").find("form").next().after("<br clear='left'><img src='http://cdn.steamcommunity.com/public/images/trans.gif' width='1' height='11' border='0'><br>");
-					$("#personalAchieveSorted").find("form").next().after(this[1]);
-					$("#personalAchieveSorted").find("form").next().after(this[0]);
-				} else {
-					$("#personalAchieveSorted").prepend("<br clear='left'><img src='http://cdn.steamcommunity.com/public/images/trans.gif' width='1' height='11' border='0'><br>");
-					$("#personalAchieveSorted").prepend(this[1]);
-					$("#personalAchieveSorted").prepend(this[0]);
-				}
+			$(achRows).each(function() {
+                $("#personalAchieveSorted").before(
+                    $("<div class='achieveRow'>").append(this[0], this[1])
+                );
 			});
 
 			$("#achievement_sort_default").on("click", function() {
