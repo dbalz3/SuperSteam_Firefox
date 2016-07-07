@@ -1,22 +1,14 @@
   {
-  "title": "SuperSteam",
-  "name": "supersteam",
-  "version": "1.0.3",
-  "description": "Improving the Steam User Experience",
-  "main": "index.js",
-  "applications": {
-  "gecko": {
-    "id": "pmcter1@gmail.com"
-  }
-},
-  "web_accessible_resources": [                                 "data/player_init.js",
-								"data/gamehighlightplayer_updated.js", 
-								"data/gamehighlightplayer_stub.js"],
-  "background": {
-    "scripts": ["data/background.js"],
-	"persistent": true
+    "title": "SuperSteam",
+    "name": "supersteam",
+    "version": "1.3.0",
+    "description": "Improving the Steam User Experience",
+    "main": "index.js",
+    "applications": {
+    "gecko": {
+      "id": "dbalazster@gmail.com"
+    }
   },
-
   "preferences": [
 		{
 			"type": "bool",
@@ -1213,7 +1205,7 @@
     "fennec": ">=38.0a1"
   },
   "license": "MIT",
-  "url": "https://steamwatcher.com",
+  "url": "http://super-steam.net",
   "dependencies": [
 	"api-utils",
 	"addon-kit"

@@ -23,7 +23,6 @@ ClientBin/
 *.publishsettings
 modulesbin/
 tempbin/
-*.xpi
 
 # Net beans files
 nbproject/private/

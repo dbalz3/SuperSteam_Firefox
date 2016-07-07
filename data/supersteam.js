@@ -1,4 +1,4 @@
-// Super Steam v0.2 mozilla
+// Super Steam v1.3.0 mozilla
 var language;
 
 var total_requests = 0;
@@ -125,6 +125,10 @@ function startsWith(string, search) {
 	return string.indexOf(search) === 0;
 };
 
+function containsString(string, search) {
+	console.log(string);
+	return string.indexOf(search) > -1;
+};
 var currency_format_info = {
     
         "BRL": { places: 2, hidePlacesWhenZero: false, symbolFormat: "R$ ", thousand: ".", decimal: ",", right: false },
@@ -1126,7 +1130,7 @@ function add_enhanced_steam_options() {
 		$dropdown_options.toggle();
 	});
 
-	$website_link = $("<a class=\"popup_menu_item\" target=\"_blank\" href=\"https://steamwatcher.com\">" + escapeHTML(localized_strings[language].website) + "</a>");
+	$website_link = $("<a class=\"popup_menu_item\" target=\"_blank\" href=\"http://super-steam.net\">" + escapeHTML(localized_strings[language].website) + "</a>");
 
 	$clear_cache_link = $("<a class=\"popup_menu_item\" href=\"\">" + escapeHTML(localized_strings[language].clear_cache) + "</a>");
 	$clear_cache_link.click(function(){
@@ -3494,9 +3498,7 @@ function check_early_access(node, image_name, image_left, selector_modifier, act
 					image = self.options.img_overlay_ea_467x181;
 					break;
 			}
-			overlay_img = $("<img class='es_overlay' src='" + image + "'>");
-			$(overlay_img).css({"left":image_left+"px"});
-			$(node).find(selector.trim()).before(overlay_img);
+			$(node).find(selector.trim()).wrap('<span class="ea_image_container"/>').before('<span class="supers_overlay"><img src="'+image+'"/></span>');
 		}
 	});
 }
@@ -3725,8 +3727,9 @@ function show_regional_pricing() {
 							var subid = jQuery(app_package).find("input[name='subid']").val();
 							if(subid){
 								jQuery(app_package).find(".price").css({"padding-left":"25px","background-image":"url("+world+")","background-repeat":"no-repeat","background-position":"5px 8px"});
-								jQuery(app_package).find(".discount_original_price").css({"position":"relative","float":"left"});
-								jQuery(app_package).find(".discount_block").css({"padding-left":"25px","background-image":"url("+world+")","background-repeat":"no-repeat","background-position":"77px 8px","background-color":"#000000"});
+								jQuery(app_package).find(".discount_original_price").css({"position":"relative"});
+								jQuery(app_package).find(".discount_final_price").css({"margin-top":"-13px"});
+								jQuery(app_package).find(".discount_block").css({"padding-left":"25px","background-image":"url("+world+")","background-repeat":"no-repeat","background-position":"5px 8px","background-color":"#000000"});
 								jQuery(app_package).find(".discount_prices").css({"background":"none"});
 
 								jQuery(app_package).find(".price, .discount_block")
@@ -3842,13 +3845,13 @@ function process_early_access() {
 			case "steamcommunity.com":
 				switch(true) {
 					case /^\/(?:id|profiles)\/.+\/wishlist/.test(window.location.pathname):
-						$(".gameLogo").each(function(index, value) { check_early_access($(this), "ea_184x69.png", 0); });
+						$(".gameListRowLogo").each(function(index, value) { check_early_access($(this), "ea_184x69.png", 0); });
 						break;
 					case /^\/(?:id|profiles)\/(.+)\/games/.test(window.location.pathname):
-						$(".gameLogo").each(function(index, value) { check_early_access($(this), "ea_184x69.png", 0); });
+						$(".gameListRowLogo").each(function(index, value) { check_early_access($(this), "ea_184x69.png", 0); });
 						break;
 					case /^\/(?:id|profiles)\/(.+)\/followedgames/.test(window.location.pathname):
-						$(".gameLogo").each(function(index, value) { check_early_access($(this), "ea_184x69.png", 4); });
+						$(".gameListRowLogo").each(function(index, value) { check_early_access($(this), "ea_184x69.png", 4); });
 						break;
 					case /^\/(?:id|profiles)\/.+\/\b(home|myactivity|status)\b/.test(window.location.pathname):
 						$(".blotter_gamepurchase_content").find("a").each(function(index, value) {
@@ -3859,9 +3862,6 @@ function process_early_access() {
 						$(".leftcol").each(function(index, value) { check_early_access($(this), "ea_184x69.png", $(this).position().left + 8); });
 						break;
 					case /^\/(?:id|profiles)\/.+/.test(window.location.pathname):
-						//need to add a container for the es images on the profile page as well as move the styling abit
-						//also need to add styling on the container for the positioning to work properly on the container
-						//and the image contained inside of it
 						$(".game_info_cap").each(function(index, value) { check_early_access($(this), "ea_sm_120.png", 0); });
 						$(".showcase_slot").each(function(index, value) { check_early_access($(this), "ea_sm_120.png", 0); });
 						break;
@@ -5293,103 +5293,6 @@ function add_friends_that_play() {
 		}
 	});
 }
-
-	
-		
-//Youtube
-function youtubeContentOnReady(appid) {
-	console.log("YOUTUBE CONTENT INIT");
-
-	var s = document.createElement('script');
-	s.src = self.options.highlight_player_updated;
-	s.onload = function() {
-		this.parentNode.removeChild(this);
-	};
-	(document.head || document.documentElement).appendChild(s);
-
-
-	//We have our player injected at this point
-	$.ajax({
-		url: "//www.fairsteam.com/app/"+appid+"?api_version=2",
-		dataType: 'json',
-	    timeout: 5000,
-		success: function(data){ 
-			var formated_array = {};
-			var thumb_data = {};
-		var channel_data = {};
-
-			if (!data['data']) return;
-			
-			videos = data['data']['videos'];
-			rating_change = data['data']['rating_change'];
-			
-			if(videos && videos.length>0)
-			{
-				for (var i = videos.length; i--;) {
-					var item = videos[i];
-			var yid = (item.yid).replace(/<[^>]*>?/g, '');
-					
-					formated_array['yv_'+yid] = yid;
-					thumb_data['yv_'+yid] = (item.thumb).replace(/<[^>]*>?/g, '');
-					channel_data['yv_'+yid] = (item.channel).replace(/<[^>]*>?/g, '');
-				}
-				
-				for(key in thumb_data) {
-					var channel_name = channel_data[key].length > 17 ? channel_data[key].substring(0,14)+"..." : channel_data[key];
-
-					highlight_strip_youtube = '<div class="highlight_strip_item highlight_strip_youtube" id="thumb_youtube_'+ key +'">'+
-						'<img style="max-width: 100%;max-height:100%;" src="'+thumb_data[key]+'">'+
-						'<div class="highlight_youtube_marker"></div>'+
-						'<div class="highlight_channel_marker">'+channel_name+'</div>'+
-					'</div>';
-					
-					$('.highlight_selector').after(highlight_strip_youtube);
-				
-					highlight_youtube = '<div style="display: none;" class="highlight_player_item highlight_youtube tall" id="highlight_youtube_'+key+'">'+
-								'<div id="youtube_'+key+'"/>'+
-
-							'</div>';
-
-					$('.highlight_player_area_spacer').after(highlight_youtube);
-				}
-				
-				$('#highlight_strip_scroll').width($('#highlight_strip_scroll').width() + Object.keys(formated_array).length*120);
-				
-				var youtubeUrlCode = 'var rgYoutubeURLs = ' + JSON.stringify(formated_array); + ';';
-
-				var script = document.createElement('script');
-				script.textContent = youtubeUrlCode;
-				(document.head || document.documentElement).appendChild(script);
-				script.parentNode.removeChild(script);
-			}
-			
-		},
-		error: function(data) {
-			console.log('Cant reach api server'); 
-			
-			chrome.runtime.sendMessage({action: "gaPageFailure"})
-		},
-		complete: function(data) {
-			dataRequestFinally();
-		}
-	});
-
-	var dataRequestFinally = function(){
-		var s = document.createElement('script');
-		s.src = self.options.player_init;
-		s.onload = function() {
-			this.parentNode.removeChild(this);
-		};
-		(document.head || document.documentElement).appendChild(s);
-	};
-
-}
-
-
-
-
-
-
 
 function add_decline_button() {
 	if (window.location.href.match(/tradeoffers\/$/)) {
