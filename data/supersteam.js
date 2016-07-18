@@ -1,4 +1,4 @@
-// Super Steam v1.3.0 mozilla
+// Super Steam v1.4.0 mozilla
 var language;
 
 var total_requests = 0;
@@ -126,7 +126,7 @@ function startsWith(string, search) {
 };
 
 function containsString(string, search) {
-	console.log(string);
+	//console.log(string);
 	return string.indexOf(search) > -1;
 };
 var currency_format_info = {
@@ -5486,18 +5486,9 @@ self.port.on("get-prefs", function(data) {
 
 					case /^\/app\/.*/.test(window.location.pathname):
 						var appid = get_appid(window.location.host + window.location.pathname);
-
-							console.log ("Loading updated Highlight player Stub");
-							var s = document.createElement('script');
-							s.src = s.src = self.options.highlight_player_stub;
-							s.onload = function() {
-								this.parentNode.removeChild(this);
-							};
-							(document.head || document.documentElement).appendChild(s);
-							
 						add_app_page_wishlist_changes(appid);
 						display_coupon_message(appid);
-                                                show_pricing_history(appid, "app");
+                        show_pricing_history(appid, "app");
 
 						drm_warnings("app");
 						add_metacritic_userscore();
@@ -5526,9 +5517,6 @@ self.port.on("get-prefs", function(data) {
 						add_review_toggle_button();
 
 						customize_app_page();
-						
-						youtubeContentOnReady(appid);
-						
 						break;
 
 					case /^\/sub\/.*/.test(window.location.pathname):
