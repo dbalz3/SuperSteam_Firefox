@@ -2,12 +2,12 @@ var data = require("sdk/self").data;
 var pageMod = require("sdk/page-mod");
 var prefSet = require("sdk/simple-prefs");
 
-var { Cu } = require("chrome");
+/*var { Cu } = require("chrome");
 let {WebRequest} = Cu.import("resource://gre/modules/WebRequest.jsm", {});
 Cu.import("resource://gre/modules/MatchPattern.jsm");
 
 let pattern = new MatchPattern("http://store.akamai.steamstatic.com/public/javascript/gamehighlightplayer.js?*");
-let pattern2 = new MatchPattern("http://store.steampowered.com/*");
+//let pattern2 = new MatchPattern("http://store.steampowered.com/*");
 
 WebRequest.onBeforeRequest.addListener(cancelRequest,
     {urls: pattern},
@@ -41,7 +41,7 @@ function examplePageLoad(event) {
         };
         (document.head || document.documentElement).appendChild(s);
     }
-}
+}*/
 
 //gBrowser.addEventListener("load", examplePageLoad, true);
 // do not try to add a callback until the browser window has

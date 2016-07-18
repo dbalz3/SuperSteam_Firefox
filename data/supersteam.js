@@ -5294,6 +5294,94 @@ function add_friends_that_play() {
 	});
 }
 
+function youtubeContentOnReady(appid) {
+	console.log("YOUTUBE CONTENT INIT");
+
+	var s = document.createElement('script');
+	s.src = self.options.highlight_player_updated;
+	s.onload = function() {
+		this.parentNode.removeChild(this);
+	};
+	(document.head || document.documentElement).appendChild(s);
+
+
+	//We have our player injected at this point
+	$.ajax({
+		url: "//www.fairsteam.com/app/"+appid+"?api_version=2",
+		dataType: 'json',
+		timeout: 5000,
+		success: function(data){
+			var formated_array = {};
+			var thumb_data = {};
+			var channel_data = {};
+
+			if (!data['data']) return;
+
+			videos = data['data']['videos'];
+			rating_change = data['data']['rating_change'];
+
+			if(videos && videos.length>0)
+			{
+				for (var i = videos.length; i--;) {
+					var item = videos[i];
+					var yid = (item.yid).replace(/<[^>]*>?/g, '');
+
+					formated_array['yv_'+yid] = yid;
+					thumb_data['yv_'+yid] = (item.thumb).replace(/<[^>]*>?/g, '');
+					channel_data['yv_'+yid] = (item.channel).replace(/<[^>]*>?/g, '');
+				}
+
+				for(key in thumb_data) {
+					var channel_name = channel_data[key].length > 17 ? channel_data[key].substring(0,14)+"..." : channel_data[key];
+
+					highlight_strip_youtube = '<div class="highlight_strip_item highlight_strip_youtube" id="thumb_youtube_'+ key +'">'+
+						'<img style="max-width: 100%;max-height:100%;" src="'+thumb_data[key]+'">'+
+						'<div class="highlight_youtube_marker"></div>'+
+						'<div class="highlight_channel_marker">'+channel_name+'</div>'+
+						'</div>';
+
+					$('.highlight_selector').after(highlight_strip_youtube);
+
+					highlight_youtube = '<div style="display: none;" class="highlight_player_item highlight_youtube tall" id="highlight_youtube_'+key+'">'+
+						'<div id="youtube_'+key+'"/>'+
+
+						'</div>';
+
+					$('.highlight_player_area_spacer').after(highlight_youtube);
+				}
+
+				$('#highlight_strip_scroll').width($('#highlight_strip_scroll').width() + Object.keys(formated_array).length*120);
+
+				var youtubeUrlCode = 'var rgYoutubeURLs = ' + JSON.stringify(formated_array); + ';';
+
+				var script = document.createElement('script');
+				script.textContent = youtubeUrlCode;
+				(document.head || document.documentElement).appendChild(script);
+				script.parentNode.removeChild(script);
+			}
+
+		},
+		error: function(data) {
+			console.log('Cant reach api server');
+
+			chrome.runtime.sendMessage({action: "gaPageFailure"})
+		},
+		complete: function(data) {
+			dataRequestFinally();
+		}
+	});
+
+	var dataRequestFinally = function(){
+		var s = document.createElement('script');
+		s.src = self.options.player_init;
+		s.onload = function() {
+			this.parentNode.removeChild(this);
+		};
+		(document.head || document.documentElement).appendChild(s);
+	};
+
+}
+
 function add_decline_button() {
 	if (window.location.href.match(/tradeoffers\/$/)) {
 		$(".maincontent .profile_leftcol .tradeoffer").each(function(index) {
@@ -5517,6 +5605,7 @@ self.port.on("get-prefs", function(data) {
 						add_review_toggle_button();
 
 						customize_app_page();
+						youtubeContentOnReady(appid);
 						break;
 
 					case /^\/sub\/.*/.test(window.location.pathname):
