@@ -2,6 +2,56 @@ var data = require("sdk/self").data;
 var pageMod = require("sdk/page-mod");
 var prefSet = require("sdk/simple-prefs");
 
+var { Cu } = require("chrome");
+let {WebRequest} = Cu.import("resource://gre/modules/WebRequest.jsm", {});
+Cu.import("resource://gre/modules/MatchPattern.jsm");
+
+let pattern = new MatchPattern("http://store.akamai.steamstatic.com/public/javascript/gamehighlightplayer.js?*");
+let pattern2 = new MatchPattern("http://store.steampowered.com/*");
+
+WebRequest.onBeforeRequest.addListener(cancelRequest,
+    {urls: pattern},
+    ["blocking"]);
+function cancelRequest(e) {
+    console.log("Canceling: " + e.url);
+    return {cancel: true};
+}
+WebRequest.onBeforeSendHeaders.addListener(redirect,
+    {
+        urls: pattern2
+    },
+    ["blocking"]);
+
+function redirect(e) {
+    console.log("Redirecting: " + e.url);
+    //gBrowser.addEventListener("load", examplePageLoad, true);
+    var contents = Components.utils.import("resource://jid1-rVtaVpAqPk8ggQ@jetpack/data/content_on_start.js");
+    return {redirectUrl: contents};
+}
+
+function examplePageLoad(event) {
+    if (event.originalTarget instanceof Components.interfaces.nsIDOMHTMLDocument) {
+        var win = event.originalTarget.defaultView;
+        console.log(win);
+        console.log ("Loading updated Highlight player Stub");
+        var s = document.createElement('script');
+        s.src = s.src = self.options.highlight_player_stub;
+        s.onload = function() {
+            this.parentNode.removeChild(this);
+        };
+        (document.head || document.documentElement).appendChild(s);
+    }
+}
+
+//gBrowser.addEventListener("load", examplePageLoad, true);
+// do not try to add a callback until the browser window has
+// been initialised. We add a callback to the tabbed browser
+// when the browser's window gets loaded.
+/*window.addEventListener("load", function () {
+ // Add a callback to be run every time a document loads.
+ // note that this includes frames/iframes within the document
+ gBrowser.addEventListener("load", examplePageLoad, true);
+ }, false);*/
 
 prefSet.on("ownedColorDefault", function() {
     prefSet.prefs.ownedColor = "#5c7836";
@@ -119,5 +169,8 @@ pageMod.PageMod({
         img_wsgf_uw_inc: data.url('img/wsgf/uw-incomplete.png'),
         img_wsgf_uw_uns: data.url('img/wsgf/uw-unsupported.png'),
         img_trading: data.url('img/trading.png'),
+        highlight_player_stub: data.url('gamehighlightplayer_stub.js'),
+        highlight_player_updated: data.url('gamehighlightplayer_updated.js'),
+        player_init: data.url('player_init.js')
     }
 });
