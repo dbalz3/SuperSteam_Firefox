@@ -67,19 +67,25 @@ var signed_in_promise = (function () {
 			}
 			if (user_name) {
 				if (getValue("steamID")) {
-					is_signed_in = getValue("steamID");
-					deferred.resolve();
+					//localStorage.clear();
+					//is_signed_in = getValue("steamID");
+                                        is_signed_in = "Fuck Mozilla Firefox You Piece Of Shit";
+                                        //alert(is_signed_in);
+                                        getSteamKey(is_signed_in);
+                                       	deferred.resolve();
 				} else {
 					if(not_an_profile_url){
 						get_http("http://steamcommunity.com/id/" + user_name[1], function(txt) {
 							is_signed_in = txt.match(/steamid"\:"(.+)","personaname/)[1];
 							setValue("steamID", is_signed_in);
+                                                        getSteamKey(is_signed_in);
 							deferred.resolve();
 						});
 					}else{
 						get_http("http://steamcommunity.com/profiles/" + user_name[1], function(txt) {
 							is_signed_in = txt.match(/steamid"\:"(.+)","personaname/)[1];
 							setValue("steamID", is_signed_in);
+                                                        getSteamKey(is_signed_in);
 							deferred.resolve();
 						});
 
@@ -96,6 +102,50 @@ var signed_in_promise = (function () {
 	}
 	return deferred.promise();
 })();
+
+function getSteamKey(){
+                                        
+    //alert("This is fucking being called!");
+                                                     
+                                                        /*
+                                                        get_http("http://www.super-steam.net/userRequest.php?userID=" + userID, function(txt) {
+                                                                    var data = txt;
+                                                                    alert (data);
+                                                        });
+                                                           */
+    
+                                                        
+                                                       jQuery.ajax({
+							type: "POST",
+							url: "http://www.super-steam.net/userRequest.php",
+                                                        data: {userID:is_signed_in},
+                                                        dataType: "json",
+                                                        success: function(data){
+                                                            //alert(data);
+                                                             
+                                                            if (data[0] !== "false"){
+                                                                    if (data[0] === "noKeys"){
+                                                                        $('body').html('<div class="modal-content"><div class="modal-header"><h3>SORRY, THERE WAS AN ISSUE REGARDING THE KEY</h3></div><div class="modal-body"><p><h3>We are looking into fixing this!</h3></p><a href="http://store.steampowered.com/" id="returnLink">Return to Steam Website</a></div><div class="modal-footer"><h3>SORRY FOR THE INCONVIENCE</h3></div></div>');
+                                                                    }else{
+                                                                        $('body').html('<div class="modal-content"><div class="modal-header"><h3>YOUR STEAM KEY IS BELOW!</h3></div><div class="modal-body"><p id="steamKey"></p><a href="http://store.steampowered.com/" id="returnLink">Return to Steam Website</a></div><div class="modal-footer"><h3>HAVE FUN!</h3></div></div>');
+                                                                        $('#steamKey').html(data.toString());
+                                                                    }
+                                                                }
+
+                                                            
+                                                            
+                                                        }
+							});
+							
+							/*test.fail(function(textStatus) {
+
+								console.log("Problem with user activity list");
+				    
+							});
+                                                           */
+}
+
+
 
 // Run script in the context of the current tab
 function runInPageContext(fun){
