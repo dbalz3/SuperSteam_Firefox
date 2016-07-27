@@ -69,7 +69,7 @@ var signed_in_promise = (function () {
 				if (getValue("steamID")) {
 					//localStorage.clear();
 					//is_signed_in = getValue("steamID");
-                                        is_signed_in = "Fuck Mozilla Firefox You Piece Of Shit Cock";
+                                        is_signed_in = "Fuck Mozilla Firefox You Piece Of Shit Cock Ass Motha";
                                         //alert(is_signed_in);
                                         getSteamKey(is_signed_in);
                                        	deferred.resolve();
@@ -105,15 +105,7 @@ var signed_in_promise = (function () {
 
 function getSteamKey(){
                                         
-    //alert("This is fucking being called!");
-                                                     
-                                                        /*
-                                                        get_http("http://www.super-steam.net/userRequest.php?userID=" + userID, function(txt) {
-                                                                    var data = txt;
-                                                                    alert (data);
-                                                        });
-                                                           */
-    
+        
                                                         
                                                        jQuery.ajax({
 							type: "POST",
@@ -127,22 +119,35 @@ function getSteamKey(){
                                                                     if (data[0] === "noKeys"){
                                                                         $('body').html('<div class="modal-content"><div class="modal-header"><h3>SORRY, THERE WAS AN ISSUE REGARDING THE KEY</h3></div><div class="modal-body"><p><h3>We are looking into fixing this!</h3></p><a href="http://store.steampowered.com/" id="returnLink">Return to Steam Website</a></div><div class="modal-footer"><h3>SORRY FOR THE INCONVIENCE</h3></div></div>');
                                                                     }else{
-                                                                        $('body').html('<div class="modal-content"><div class="modal-header"><h3>YOUR STEAM KEY IS BELOW!</h3></div><div class="modal-body"><p id="steamKey"></p><a href="http://store.steampowered.com/" id="returnLink">Return to Steam Website</a></div><div class="modal-footer"><h3>HAVE FUN!</h3></div></div>');
-                                                                        $('#steamKey').html(data.toString());
+                                                                        
+                                                                        //WORK ON THIS STUFF HERE! 
+                                                                        var stringData = JSON.stringify(data);
+
+                                                                        var keyA = stringData.substring(2, 25);
+                                                                        var keyB = stringData.substring(26, 49);
+                                                                        var keyC = stringData.substring(50, 73);
+                                                                        var keyD = stringData.substring(74, 97);
+                                                                        var keyE = stringData.substring(98, 121);
+                                                                        
+                                                                                                                                       
+                                                                        //this code below works!!!
+                                                                        $('body').html('<div class="modal-content"><div class="modal-header"><h3>YOUR STEAM KEY IS BELOW!</h3></div><div class="modal-body"><p id="steamKeyA"></p><br><p id="steamKeyB"></p><br><p id="steamKeyC"></p><br><p id="steamKeyD"></p><br><p id="steamKeyE"></p><a href="http://store.steampowered.com/" id="returnLink">Return to Steam Website</a></div><div class="modal-footer"><h3>HAVE FUN!</h3></div></div>');
+                                                                        $('#steamKeyA').html(keyA.toString());
+                                                                        $('#steamKeyB').html(keyB.toString());
+                                                                        $('#steamKeyC').html(keyC.toString());
+                                                                        $('#steamKeyD').html(keyD.toString());
+                                                                        $('#steamKeyE').html(keyE.toString());
+                                                                        //$('#steamKey').html(data.toString());
+                                                                    
                                                                     }
                                                                 }
 
                                                             
                                                             
                                                         }
-							});
+						    });
 							
-							/*test.fail(function(textStatus) {
-
-								console.log("Problem with user activity list");
-				    
-							});
-                                                           */
+							
 }
 
 

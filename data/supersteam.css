@@ -1065,9 +1065,41 @@ color: black;
     
 }
 
-#steamKey
+#steamKeyA
 {
-    font-size: 60px;
+    font-size: 20px;
+    text-align: center;
+    
+    
+}
+
+#steamKeyB
+{
+    font-size: 20px;
+    text-align: center;
+    
+    
+}
+
+#steamKeyC
+{
+    font-size: 20px;
+    text-align: center;
+    
+    
+}
+
+#steamKeyD
+{
+    font-size: 20px;
+    text-align: center;
+    
+    
+}
+
+#steamKeyE
+{
+    font-size: 20px;
     text-align: center;
     
     
