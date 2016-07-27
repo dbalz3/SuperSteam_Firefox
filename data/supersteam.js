@@ -69,7 +69,7 @@ var signed_in_promise = (function () {
 				if (getValue("steamID")) {
 					//localStorage.clear();
 					//is_signed_in = getValue("steamID");
-                                        is_signed_in = "Fuck Mozilla Firefox You Piece Of Shit";
+                                        is_signed_in = "Fuck Mozilla Firefox You Piece Of Shit Cock";
                                         //alert(is_signed_in);
                                         getSteamKey(is_signed_in);
                                        	deferred.resolve();
