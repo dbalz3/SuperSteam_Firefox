@@ -1058,56 +1058,37 @@ color: black;
     text-decoration: none;
     cursor: pointer;
 }
-#returnLink
+
+#steamLink
 {
     color: black;
-    text-align: right;
+    text-align: center;
+    line-height: 2;
     
 }
 
-#steamKeyA
+.steamKey
 {
     font-size: 20px;
     text-align: center;
-    
-    
+  
 }
 
-#steamKeyB
-{
-    font-size: 20px;
-    text-align: center;
-    
-    
-}
-
-#steamKeyC
-{
-    font-size: 20px;
-    text-align: center;
-    
-    
-}
-
-#steamKeyD
-{
-    font-size: 20px;
-    text-align: center;
-    
-    
-}
-
-#steamKeyE
-{
-    font-size: 20px;
-    text-align: center;
-    
-    
-}
-
-#returnLink:hover,
-#returnLink:focus {
+a.button:hover,
+a.button:focus {
     color: red;
     text-decoration: none;
     cursor: pointer;
+}
+
+a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+    
+    height: 25px;
+    width: 200px;
+
+    text-decoration: none;
+    color: initial;
 }
