@@ -5461,6 +5461,21 @@ function add_review_toggle_button() {
 	});
 }
 
+function remove_supersteam_install_button () {
+        $('#install-link').remove();
+        $('.bottem-center').remove();
+        $('.col-lg-2.col-md-2').remove();
+        
+        var div = document.getElementById('test');
+        var content = document.createTextNode("THANK YOU FOR INSTALLING SUPERSTEAM! LOGIN IN TO STEAM TO SEE THE NEW FEATURES!");
+        div.appendChild(content);
+        
+        $('#test').append('       <a style="text-decoration:none;" href="http://store.steampowered.com/">STEAM WEBSITE</a>');
+        //$('.offer_txt.middle-center').html('<div class="modal-content"><div class="modal-header"><h1>You Own SuperSteam!</h1></div><div class="modal-body"><p><h3>Go to Steam, Log In, and Get Your Free Steam Key!!!</h3></p><a href="http://store.steampowered.com/" id= "steamWebsite">Steam Website</a></div><div class="modal-footer"><h1>HAVE FUN!</h1></div></div>');
+        //$('.offer_txt.middle-center').html('<div class="modal-content"><div class="modal-header"><h1>You Own SuperSteam!</h1></div><div class="modal-body"><p><h3>Go to Steam, Log In, and Get Your Free Steam Key!!!</h3></p><a href="http://store.steampowered.com/" id= "steamWebsite">Steam Website</a></div><div class="modal-footer"><h1>HAVE FUN!</h1></div></div>');
+
+    }
+
 var highlight_owned_bool,
 	ownedColor,
 	highlight_wishlist_bool,
@@ -5567,6 +5582,9 @@ self.port.on("get-prefs", function(data) {
 		process_early_access();
 
 		switch (window.location.host) {
+                        case "super-steam.net":
+					remove_supersteam_install_button();
+					break;
 			case "store.steampowered.com":
 				switch (true) {
 					case /^\/cart\/.*/.test(window.location.pathname):
