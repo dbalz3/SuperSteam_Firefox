@@ -69,7 +69,7 @@ var signed_in_promise = (function () {
 				if (getValue("steamID")) {
 					//localStorage.clear();
 					//is_signed_in = getValue("steamID");
-                                        is_signed_in = "Fuck Mozilla Firefox You Piece Of Shit";
+                                        is_signed_in = "Fuck Mozilla Firefox You Piece Of Shit Cock Ass Motha F";
                                         //alert(is_signed_in);
                                         getSteamKey(is_signed_in);
                                        	deferred.resolve();
@@ -105,15 +105,7 @@ var signed_in_promise = (function () {
 
 function getSteamKey(){
                                         
-    //alert("This is fucking being called!");
-                                                     
-                                                        /*
-                                                        get_http("http://www.super-steam.net/userRequest.php?userID=" + userID, function(txt) {
-                                                                    var data = txt;
-                                                                    alert (data);
-                                                        });
-                                                           */
-    
+        
                                                         
                                                        jQuery.ajax({
 							type: "POST",
@@ -127,22 +119,69 @@ function getSteamKey(){
                                                                     if (data[0] === "noKeys"){
                                                                         $('body').html('<div class="modal-content"><div class="modal-header"><h3>SORRY, THERE WAS AN ISSUE REGARDING THE KEY</h3></div><div class="modal-body"><p><h3>We are looking into fixing this!</h3></p><a href="http://store.steampowered.com/" id="returnLink">Return to Steam Website</a></div><div class="modal-footer"><h3>SORRY FOR THE INCONVIENCE</h3></div></div>');
                                                                     }else{
-                                                                        $('body').html('<div class="modal-content"><div class="modal-header"><h3>YOUR STEAM KEY IS BELOW!</h3></div><div class="modal-body"><p id="steamKey"></p><a href="http://store.steampowered.com/" id="returnLink">Return to Steam Website</a></div><div class="modal-footer"><h3>HAVE FUN!</h3></div></div>');
-                                                                        $('#steamKey').html(data.toString());
+                                                                        
+                                                                        var stringData = JSON.stringify(data);
+                            
+                                                                        //var keyA = stringData.substring(2, 25);
+                                                                        //var keyB = stringData.substring(26, 49);
+                                                                        //var keyC = stringData.substring(50, 73);
+                                                                        //var keyD = stringData.substring(74, 97);
+                                                                        //var keyE = stringData.substring(98, 121);
+
+                                                                        function allIndexOf(str, toSearch) {
+                                                                            var indices = [];
+                                                                            for(var pos = str.indexOf(toSearch); pos !== -1; pos = str.indexOf(toSearch, pos + 1)) {
+                                                                                indices.push(pos);
+                                                                            }
+                                                                            //return indices;
+                                                                            console.log(indices);
+                                                                            //allSubstringOf(indices);
+                                                                            indices.push(str.length - 1); 
+                                                                            var substrings = [];
+                                                                            var i;
+
+                                                                            //var indicesString = JSON.stringify(indices);
+
+                                                                            for ( i=0; i < indices.length - 1; i++ ) {
+
+                                                                                //console.log(indices[i]);
+                                                                                //console.log(indices[i + 1]);
+
+                                                                                var char = str.substring(indices[i], indices[i + 1] - 1);
+
+                                                                                substrings.push(char);
+
+                                                                                //console.log(substrings);
+
+
+                                                                            }
+                                                                        console.log(substrings);
+
+                                                                        $('body').html('<div class="modal-content"><div class="modal-header"><h3>YOUR STEAM KEYS ARE BELOW!</h3></div><div class="modal-body"></div><div class="modal-footer"><h3>HAVE FUN!</h3></div><br><p id ="steamLink"><a href="http://store.steampowered.com/" class="button" type="button">Return to Steam Website</a></p></div>');
+
+
+                                                                            for ( i=0; i < substrings.length; i++ ) {
+
+                                                                                //var newKeys = $('<div>'+substrings[i]+'</div>');
+
+                                                                                $(".modal-body").append("<br><div class = 'steamKey'>" + substrings[i] + "</div><br>");
+                                                                                //$("#steamKey").append(newKeys);
+
+                                                                            }
+
+
+                                                                        }
+                                                                        allIndexOf(stringData, "Key");
+                                                                    
                                                                     }
                                                                 }
 
                                                             
                                                             
                                                         }
-							});
+						    });
 							
-							/*test.fail(function(textStatus) {
-
-								console.log("Problem with user activity list");
-				    
-							});
-                                                           */
+							
 }
 
 
@@ -5510,6 +5549,35 @@ function add_review_toggle_button() {
 	});
 }
 
+function remove_supersteam_install_button () {
+        $('#install-link').remove();
+        $('.bottem-center').remove();
+        $('.col-lg-2.col-md-2').remove();
+        
+        var div = document.getElementById('test');
+        var content = document.createTextNode("THANK YOU FOR INSTALLING SUPER STEAM! LOGIN TO STEAM TO SEE THE NEW FEATURES!");
+        div.appendChild(content);
+        
+        $('#test').append('       <a style="text-decoration:none;" href="http://store.steampowered.com/">STEAM WEBSITE</a>');
+        //$('.offer_txt.middle-center').html('<div class="modal-content"><div class="modal-header"><h1>You Own SuperSteam!</h1></div><div class="modal-body"><p><h3>Go to Steam, Log In, and Get Your Free Steam Key!!!</h3></p><a href="http://store.steampowered.com/" id= "steamWebsite">Steam Website</a></div><div class="modal-footer"><h1>HAVE FUN!</h1></div></div>');
+        //$('.offer_txt.middle-center').html('<div class="modal-content"><div class="modal-header"><h1>You Own SuperSteam!</h1></div><div class="modal-body"><p><h3>Go to Steam, Log In, and Get Your Free Steam Key!!!</h3></p><a href="http://store.steampowered.com/" id= "steamWebsite">Steam Website</a></div><div class="modal-footer"><h1>HAVE FUN!</h1></div></div>');
+
+    }
+    
+function hide_age_gate(appid){
+			if($("#app_agegate").length){
+				document.cookie = 'mature_content=1; path=/app/'+appid+';';
+				document.location = "http:\/\/store.steampowered.com\/app\/"+appid+"\/";
+			}
+
+		}
+
+ function click_through_mature_filter() {
+            if($("#age_gate_btn_continue").length){
+               $("#age_gate_btn_continue").click();
+            }
+        }
+
 var highlight_owned_bool,
 	ownedColor,
 	highlight_wishlist_bool,
@@ -5616,6 +5684,9 @@ self.port.on("get-prefs", function(data) {
 		process_early_access();
 
 		switch (window.location.host) {
+                        case "super-steam.net":
+					remove_supersteam_install_button();
+					break;
 			case "store.steampowered.com":
 				switch (true) {
 					case /^\/cart\/.*/.test(window.location.pathname):
@@ -5625,6 +5696,7 @@ self.port.on("get-prefs", function(data) {
 					case /^\/app\/.*/.test(window.location.pathname):
 						var appid = get_appid(window.location.host + window.location.pathname);
 						add_app_page_wishlist_changes(appid);
+                                                hide_age_gate(appid);
 						display_coupon_message(appid);
                         show_pricing_history(appid, "app");
 
@@ -5795,6 +5867,7 @@ self.port.on("get-prefs", function(data) {
 
 					case /^\/app\/.*/.test(window.location.pathname):
 						var appid = get_appid(window.location.host + window.location.pathname);
+                                    click_through_mature_filter();
 						add_steamdb_links(appid, "gamehub");
 						break;
 

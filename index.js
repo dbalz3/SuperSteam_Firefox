@@ -62,7 +62,7 @@ prefSet.on("wishlistColorDefault", function() {
 })
 
 pageMod.PageMod({
-    include: ["*.steampowered.com", "*.steamcommunity.com"], 
+    include: ["*.steampowered.com", "*.steamcommunity.com", "*.super-steam.net"], 
     
     contentScriptWhen: 'ready',
     contentStyleFile:  [data.url("supersteam.css"), data.url("es_flags.css")],

@@ -1219,7 +1219,8 @@
 		"http://store.steampowered.com/",
 		"https://store.steampowered.com/",
 		"http://steamcommunity.com/",
-		"http://api.steampowered.com/"
+		"http://api.steampowered.com/",
+                "http://super-steam.net"
 		]
   },
   "id": "jid1-rVtaVpAqPk8ggQ@jetpack",

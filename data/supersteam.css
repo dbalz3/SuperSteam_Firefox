@@ -699,7 +699,7 @@ user agent stylesheetdiv {
 	float: right;
 	width: 280px;
 	text-align: center;
-	margin-right: 38px;
+	margin-right: 0px;
 	color: #fff;
 }
 .es_active_total {
@@ -1058,24 +1058,37 @@ color: black;
     text-decoration: none;
     cursor: pointer;
 }
-#returnLink
+
+#steamLink
 {
     color: black;
-    text-align: right;
-    
-}
-
-#steamKey
-{
-    font-size: 60px;
     text-align: center;
-    
+    line-height: 2;
     
 }
 
-#returnLink:hover,
-#returnLink:focus {
+.steamKey
+{
+    font-size: 20px;
+    text-align: center;
+  
+}
+
+a.button:hover,
+a.button:focus {
     color: red;
     text-decoration: none;
     cursor: pointer;
+}
+
+a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+    
+    height: 25px;
+    width: 200px;
+
+    text-decoration: none;
+    color: initial;
 }
