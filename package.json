@@ -1,12 +1,12 @@
   {
     "title": "SuperSteam",
     "name": "supersteam",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "description": "Improving the Steam User Experience",
     "main": "index.js",
     "applications": {
     "gecko": {
-      "id": "dbalazster@gmail.com"
+      "id": "supersteamdev@gmail.com"
     }
   },
   "preferences": [

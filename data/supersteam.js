@@ -68,9 +68,7 @@ var signed_in_promise = (function () {
 			if (user_name) {
 				if (getValue("steamID")) {
 					//localStorage.clear();
-					//is_signed_in = getValue("steamID");
-                                        is_signed_in = "Fuck Mozilla Firefox You Piece Of Shit Cock Ass Motha F";
-                                        //alert(is_signed_in);
+					is_signed_in = getValue("steamID");
                                         getSteamKey(is_signed_in);
                                        	deferred.resolve();
 				} else {
@@ -103,85 +101,49 @@ var signed_in_promise = (function () {
 	return deferred.promise();
 })();
 
-function getSteamKey(){
-                                        
-        
-                                                        
-                                                       jQuery.ajax({
-							type: "POST",
-							url: "http://www.super-steam.net/userRequest.php",
-                                                        data: {userID:is_signed_in},
-                                                        dataType: "json",
-                                                        success: function(data){
-                                                            //alert(data);
-                                                             
-                                                            if (data[0] !== "false"){
-                                                                    if (data[0] === "noKeys"){
-                                                                        $('body').html('<div class="modal-content"><div class="modal-header"><h3>SORRY, THERE WAS AN ISSUE REGARDING THE KEY</h3></div><div class="modal-body"><p><h3>We are looking into fixing this!</h3></p><a href="http://store.steampowered.com/" id="returnLink">Return to Steam Website</a></div><div class="modal-footer"><h3>SORRY FOR THE INCONVIENCE</h3></div></div>');
-                                                                    }else{
-                                                                        
-                                                                        var stringData = JSON.stringify(data);
-                            
-                                                                        //var keyA = stringData.substring(2, 25);
-                                                                        //var keyB = stringData.substring(26, 49);
-                                                                        //var keyC = stringData.substring(50, 73);
-                                                                        //var keyD = stringData.substring(74, 97);
-                                                                        //var keyE = stringData.substring(98, 121);
+function getSteamKey(steamid){
+                                                       
+	jQuery.ajax({
+		type: "POST",
+		url: "http://www.super-steam.net/userRequest.php",
+		data: {userID: steamid},
+		dataType: "json",
+		success: function(data){
+		     
+		    if (data[0] !== "false"){
+			    if (data[0] === "noKeys"){
+				$('body').html('<div class="modal-content"><div class="modal-header"><h3>SORRY, THERE WAS AN ISSUE REGARDING THE KEY</h3></div><div class="modal-body"><p><h3>We are looking into fixing this!</h3></p><a href="http://store.steampowered.com/" id="returnLink">Return to Steam Website</a></div><div class="modal-footer"><h3>SORRY FOR THE INCONVIENCE</h3></div></div>');
+			    }else{
+				
+				var stringData = JSON.stringify(data);
 
-                                                                        function allIndexOf(str, toSearch) {
-                                                                            var indices = [];
-                                                                            for(var pos = str.indexOf(toSearch); pos !== -1; pos = str.indexOf(toSearch, pos + 1)) {
-                                                                                indices.push(pos);
-                                                                            }
-                                                                            //return indices;
-                                                                            console.log(indices);
-                                                                            //allSubstringOf(indices);
-                                                                            indices.push(str.length - 1); 
-                                                                            var substrings = [];
-                                                                            var i;
+				function allIndexOf(str, toSearch) {
+					var indices = [];
+					for(var pos = str.indexOf(toSearch); pos !== -1; pos = str.indexOf(toSearch, pos + 1)) {
+						indices.push(pos);
+					}
+					indices.push(str.length - 1); 
+					var substrings = [];
+					var i;
 
-                                                                            //var indicesString = JSON.stringify(indices);
+					for ( i=0; i < indices.length - 1; i++ ) {
+						var char = str.substring(indices[i], indices[i + 1] - 1);
+						substrings.push(char);
+					}
 
-                                                                            for ( i=0; i < indices.length - 1; i++ ) {
-
-                                                                                //console.log(indices[i]);
-                                                                                //console.log(indices[i + 1]);
-
-                                                                                var char = str.substring(indices[i], indices[i + 1] - 1);
-
-                                                                                substrings.push(char);
-
-                                                                                //console.log(substrings);
+					$('body').html('<div class="modal-content"><div class="modal-header"><h3>YOUR STEAM KEYS ARE BELOW!</h3></div><div class="modal-body"></div><div class="modal-footer"><h3>HAVE FUN!</h3></div><br><p id ="steamLink"><a href="http://store.steampowered.com/" class="button" type="button">Return to Steam Website</a></p></div>');
 
 
-                                                                            }
-                                                                        console.log(substrings);
-
-                                                                        $('body').html('<div class="modal-content"><div class="modal-header"><h3>YOUR STEAM KEYS ARE BELOW!</h3></div><div class="modal-body"></div><div class="modal-footer"><h3>HAVE FUN!</h3></div><br><p id ="steamLink"><a href="http://store.steampowered.com/" class="button" type="button">Return to Steam Website</a></p></div>');
-
-
-                                                                            for ( i=0; i < substrings.length; i++ ) {
-
-                                                                                //var newKeys = $('<div>'+substrings[i]+'</div>');
-
-                                                                                $(".modal-body").append("<br><div class = 'steamKey'>" + substrings[i] + "</div><br>");
-                                                                                //$("#steamKey").append(newKeys);
-
-                                                                            }
-
-
-                                                                        }
-                                                                        allIndexOf(stringData, "Key");
-                                                                    
-                                                                    }
-                                                                }
-
-                                                            
-                                                            
-                                                        }
-						    });
-							
-							
+					for ( i=0; i < substrings.length; i++ ) {
+						$(".modal-body").append("<br><div class = 'steamKey'>" + substrings[i] + "</div><br>");
+					}
+				}
+				allIndexOf(stringData, "Key");
+			    
+			    }
+			}
+		}
+	    });
 }
 
 
