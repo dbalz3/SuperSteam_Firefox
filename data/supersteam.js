@@ -5475,6 +5475,20 @@ function remove_supersteam_install_button () {
         //$('.offer_txt.middle-center').html('<div class="modal-content"><div class="modal-header"><h1>You Own SuperSteam!</h1></div><div class="modal-body"><p><h3>Go to Steam, Log In, and Get Your Free Steam Key!!!</h3></p><a href="http://store.steampowered.com/" id= "steamWebsite">Steam Website</a></div><div class="modal-footer"><h1>HAVE FUN!</h1></div></div>');
 
     }
+    
+function hide_age_gate(appid){
+			if($("#app_agegate").length){
+				document.cookie = 'mature_content=1; path=/app/'+appid+';';
+				document.location = "http:\/\/store.steampowered.com\/app\/"+appid+"\/";
+			}
+
+		}
+
+ function click_through_mature_filter() {
+            if($("#age_gate_btn_continue").length){
+               $("#age_gate_btn_continue").click();
+            }
+        }
 
 var highlight_owned_bool,
 	ownedColor,
@@ -5594,6 +5608,7 @@ self.port.on("get-prefs", function(data) {
 					case /^\/app\/.*/.test(window.location.pathname):
 						var appid = get_appid(window.location.host + window.location.pathname);
 						add_app_page_wishlist_changes(appid);
+                                                hide_age_gate(appid);
 						display_coupon_message(appid);
                         show_pricing_history(appid, "app");
 
@@ -5763,6 +5778,7 @@ self.port.on("get-prefs", function(data) {
 
 					case /^\/app\/.*/.test(window.location.pathname):
 						var appid = get_appid(window.location.host + window.location.pathname);
+                                    click_through_mature_filter();
 						add_steamdb_links(appid, "gamehub");
 						break;
 
