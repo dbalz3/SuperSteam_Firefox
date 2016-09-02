@@ -5467,7 +5467,7 @@ function remove_supersteam_install_button () {
         $('.col-lg-2.col-md-2').remove();
         
         var div = document.getElementById('test');
-        var content = document.createTextNode("THANK YOU FOR INSTALLING SUPERSTEAM! LOGIN IN TO STEAM TO SEE THE NEW FEATURES!");
+        var content = document.createTextNode("THANK YOU FOR INSTALLING SUPERSTEAM! LOGIN TO STEAM TO SEE THE NEW FEATURES!");
         div.appendChild(content);
         
         $('#test').append('       <a style="text-decoration:none;" href="http://store.steampowered.com/">STEAM WEBSITE</a>');
