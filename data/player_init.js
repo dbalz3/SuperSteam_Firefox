@@ -1,4 +1,3 @@
-console.log("PLAYER INIT INIT");
 //Initialization of our HighlightPlayer class
 var rgYoutubeURLs = rgYoutubeURLs || new Array();
 

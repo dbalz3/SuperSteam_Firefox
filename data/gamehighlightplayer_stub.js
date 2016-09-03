@@ -1,5 +1,4 @@
 //This file is purely a simple hack to prevent HighlightPlayer from first initialisation. It's just stub and flow stop preventer. 
-console.log("STUB INIT");
 
 function HighlightPlayer( args )
 {

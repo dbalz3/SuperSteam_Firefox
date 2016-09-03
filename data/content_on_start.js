@@ -1,5 +1,4 @@
 //This file prevents HighlightPlayer from first initialisation by using our own stub file instead.
-console.log ("Loading updated Highlight player Stub");
 var s = document.createElement('script');
 s.src = s.src = self.options.highlight_player_stub;
 s.onload = function() {

@@ -1,5 +1,4 @@
 //Main app logic located here
-console.log("This is running!!!");
 
 var r = /\d+/;
 var app_id = document.location.href.match(r)[0]

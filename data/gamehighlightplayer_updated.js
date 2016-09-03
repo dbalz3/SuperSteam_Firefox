@@ -1,5 +1,4 @@
 //This file is a substitute to the original gamehighlighplayer.js developed by Valve. It adds youtube playing functionality and fixes some not obvious behaviours. 
-console.log("UPDATED HIGHLIGHT PLAYER INIT");
 var g_player = null;
 var y_players = {};
 

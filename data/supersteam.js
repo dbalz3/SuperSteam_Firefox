@@ -177,7 +177,6 @@ function startsWith(string, search) {
 };
 
 function containsString(string, search) {
-	//console.log(string);
 	return string.indexOf(search) > -1;
 };
 var currency_format_info = {
@@ -5346,7 +5345,6 @@ function add_friends_that_play() {
 }
 
 function youtubeContentOnReady(appid) {
-	console.log("YOUTUBE CONTENT INIT");
 
 	var s = document.createElement('script');
 	s.src = self.options.highlight_player_updated;
@@ -5413,9 +5411,8 @@ function youtubeContentOnReady(appid) {
 
 		},
 		error: function(data) {
-			console.log('Cant reach api server');
 
-			chrome.runtime.sendMessage({action: "gaPageFailure"})
+			//chrome.runtime.sendMessage({action: "gaPageFailure"})
 		},
 		complete: function(data) {
 			dataRequestFinally();
@@ -5689,7 +5686,7 @@ self.port.on("get-prefs", function(data) {
 						add_review_toggle_button();
 
 						customize_app_page();
-						youtubeContentOnReady(appid);
+						//youtubeContentOnReady(appid);
 						break;
 
 					case /^\/sub\/.*/.test(window.location.pathname):
