@@ -1082,6 +1082,7 @@ function add_wishlist_ajaxremove() {
 }
 
 function pack_split(node, ways) {
+    
 	var price_text = $(node).find(".discount_final_price").html();
 	var at_end, comma, places = 2;
 	if (price_text == null) { price_text = $(node).find(".game_purchase_price").html(); }
@@ -1105,26 +1106,27 @@ function add_4pack_breakdown() {
 	$(".game_area_purchase_game_wrapper").each(function() {
 		var title = $(this).find("h1").text().trim();
 		title = title.toLowerCase().replace(/-/g, ' ');
-		if (!title || !title.contains('pack')) return;
+		if (!title || !title.includes('pack')) return;
 
-		if (title.contains(' 2 pack')) { pack_split(this, 2); }
-		else if (title.contains(' two pack')) { pack_split(this, 2); }
-		else if (title.contains('tower wars friend pack')) { pack_split(this, 2); }
+		if (title.includes(' 2 pack') && !title.includes('bioshock')) { pack_split(this, 2); }
+		else if (title.includes(' two pack')) { pack_split(this, 2); }
+		else if (title.includes('tower wars friend pack')) { pack_split(this, 2); }
 
-		else if (title.contains(' 3 pack') && !title.contains('doom 3')) { pack_split(this, 3); }
-		else if (title.contains(' three pack')) { pack_split(this, 3); }
-		else if (title.contains('tower wars team pack')) { pack_split(this, 3); }
+		else if (title.includes(' 3 pack') && !title.includes('doom 3')) { pack_split(this, 3); }
+		else if (title.includes(' three pack')) { pack_split(this, 3); }
+		else if (title.includes('tower wars team pack')) { pack_split(this, 3); }
 
-		else if (title.contains(' 4 pack')) { pack_split(this, 4); }
-		else if (title.contains(' four pack')) { pack_split(this, 4); }
-		else if (title.contains(' clan pack')) { pack_split(this, 4); }
+		else if (title.includes(' 4 pack')) { pack_split(this, 4); }
+		else if (title.includes(' four pack')) { pack_split(this, 4); }
+		else if (title.includes(' clan pack')) { pack_split(this, 4); }
 
-		else if (title.contains(' 5 pack')) { pack_split(this, 5); }
-		else if (title.contains(' five pack')) { pack_split(this, 5); }
+		else if (title.includes(' 5 pack')) { pack_split(this, 5); }
+		else if (title.includes(' five pack')) { pack_split(this, 5); }
 
-		else if (title.contains(' 6 pack')) { pack_split(this, 6); }
-		else if (title.contains(' six pack')) { pack_split(this, 6); }
+		else if (title.includes(' 6 pack')) { pack_split(this, 6); }
+		else if (title.includes(' six pack')) { pack_split(this, 6); }
 	});
+       
 }
 
 function send_age_verification() {
