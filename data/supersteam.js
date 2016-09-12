@@ -5619,6 +5619,7 @@ self.port.on("get-prefs", function(data) {
 						display_purchase_date();
 
 						show_regional_pricing();
+                                                add_steamspy_info(appid);
                                                 add_steamchart_info(appid);
                                                 add_dlc_checkboxes();
                                                 add_app_badge_progress(appid);
@@ -5632,9 +5633,7 @@ self.port.on("get-prefs", function(data) {
 						add_familysharing_warning(appid);
 						add_dlc_page_link(appid);
 						add_4pack_breakdown();
-						add_steamspy_info(appid);
-						
-						
+									
 						fix_achievement_icon_size();
 						add_astats_link(appid);
 
