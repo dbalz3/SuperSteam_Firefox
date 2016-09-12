@@ -1101,6 +1101,7 @@ function pack_split(node, ways) {
 }
 
 function add_4pack_breakdown() {
+    
 	$(".game_area_purchase_game_wrapper").each(function() {
 		var title = $(this).find("h1").text().trim();
 		title = title.toLowerCase().replace(/-/g, ' ');
@@ -1784,6 +1785,7 @@ function add_pcgamingwiki_link(appid) {
 
 // Add link to Steam Card Exchange
 function add_steamcardexchange_link(appid){
+    
 	if ($(".icon").find('img[src$="/ico_cards.png"]').length > 0) {
 		$("#demo_block").prepend('<a class="btnv6_blue_hoverfade btn_medium cardexchange_btn" target="_blank" href="http://www.steamcardexchange.net/index.php?gamepage-appid-' + appid + '" style="display: block; margin-bottom: 6px;"><span><i class="ico16" style="background-image:url(' + self.options.img_steamcardexchange_store + ')"></i>&nbsp;&nbsp; ' + localized_strings[language].view_in + ' Steam Card Exchange</span></a>');
 	}
@@ -1915,7 +1917,8 @@ function add_widescreen_certification(appid) {
 	}
 }
 
-function add_dlc_page_link(appid) {    
+function add_dlc_page_link(appid) { 
+    
 	if ($(".game_area_dlc_section").length > 0) {
 		var html = $(".game_area_dlc_section").html();
 		title = html.match(/<h2 class=\"gradientbg">(.+)<\/h2>/)[1];
@@ -2509,6 +2512,7 @@ function hide_empty_inventory_tabs() {
 
 // Add SteamDB links to pages
 function add_steamdb_links(appid, type) {
+    
 	if (showdblinks === true) {
 		switch (type) {
 			case "gamehub":
@@ -2536,6 +2540,7 @@ function add_steamdb_links(appid, type) {
 }
 
 function add_familysharing_warning(appid) {
+    
 	var exfgls_appids, exfgls_promise = (function () {
 		var deferred = new $.Deferred();
 		if (window.location.protocol != "https:") {
@@ -3199,6 +3204,7 @@ function bind_ajax_content_highlighting() {
 }
 
 function add_app_page_highlights(appid) {
+    
 	if (highlight_owned_bool) {
 		if ($(".game_area_already_owned").find(".ds_owned_flag").length > 0) {
 			$(".apphub_AppName").css("color", ownedColor);
@@ -3511,6 +3517,7 @@ function add_dlc_checkboxes() {
 }
 
 function fix_achievement_icon_size() {
+    
 	if ($(".rightblock").find("img[src$='ico_achievements.png']").length > 0) {
 		$(".rightblock").find("img[src$='ico_achievements.png']").attr("height", "24");
 		$(".rightblock").find("img[src$='ico_achievements.png']").css("margin-top", "-5px");
@@ -3518,6 +3525,7 @@ function fix_achievement_icon_size() {
 }
 
 function add_astats_link(appid) {
+    
 	if (showastats === true) {
 		$("#achievement_block").append("<div class='game_area_details_specs'><div class='icon'><img src='" + self.options.img_ico_astatsnl + "' style='margin-left: 4px'></div><a class='name' href='http://astats.astats.nl/astats/Steam_Game_Info.php?AppID=" + appid + "' target='_blank'><span>" + localized_strings[language].view_astats + "</span></a>");
 	}	
@@ -3965,6 +3973,7 @@ function process_early_access() {
 }
 
 function customize_app_page() {
+    
 	// Add a "Customize" button
 	$(".purchase_area_spacer:last").after("<link rel='stylesheet' type='text/css' href='http://store.akamai.steamstatic.com/public/css/v6/home.css'><div id='es_customize_btn' class='home_actions_ctn'><div class='home_btn home_customize_btn'>" + localized_strings[language].customize + "</div></div>");
 
@@ -5394,7 +5403,7 @@ function add_decline_button() {
 }
 
 function add_acrtag_warning() {
-		
+    
 	if (showACRTAG) {
 		var acrtag_subids, acrtag_promise = (function () {
 			var deferred = new $.Deferred();
@@ -5441,6 +5450,7 @@ function add_acrtag_warning() {
 }
 
 function add_review_toggle_button() {
+    
 	$("#review_create").find("h1").append("<div style='float: right;'><a class='btnv6_lightblue_blue btn_mdium' id='es_review_toggle'><span>▲</span></a></div>");
 	$("#review_container").find("p, .avatar_block, .content").wrapAll("<div id='es_review_section'></div>");
 
@@ -5611,36 +5621,34 @@ self.port.on("get-prefs", function(data) {
 						add_app_page_wishlist_changes(appid);
                                                 hide_age_gate(appid);
 						display_coupon_message(appid);
-                        show_pricing_history(appid, "app");
+                                                show_pricing_history(appid, "app");
 
 						drm_warnings("app");
 						add_metacritic_userscore();
 						add_steamreview_userscore(appid);
 						display_purchase_date();
 
-						show_regional_pricing();
+						add_acrtag_warning();
+						add_review_toggle_button();
+                                                customize_app_page();
+                                                fix_achievement_icon_size();
+                                                add_astats_link(appid);
+                                                add_pcgamingwiki_link(appid);
+                                                add_steam_client_link(appid);
+                                                add_hltb_info(appid);
+                                                show_regional_pricing();
                                                 add_steamspy_info(appid);
                                                 add_steamchart_info(appid);
                                                 add_dlc_checkboxes();
                                                 add_app_badge_progress(appid);
                                                 add_widescreen_certification(appid);
-						add_hltb_info(appid);
-						add_steam_client_link(appid);
-						add_pcgamingwiki_link(appid);
 						add_steamcardexchange_link(appid);
 						add_app_page_highlights();
 						add_steamdb_links(appid, "app");
 						add_familysharing_warning(appid);
 						add_dlc_page_link(appid);
 						add_4pack_breakdown();
-									
-						fix_achievement_icon_size();
-						add_astats_link(appid);
-
-						add_acrtag_warning();
-						add_review_toggle_button();
-
-						customize_app_page();
+						
 						break;
 
 					case /^\/sub\/.*/.test(window.location.pathname):
