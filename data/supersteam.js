@@ -1132,7 +1132,7 @@ function send_age_verification() {
 }
 
 function add_steamchart_info(appid) {
-	if (getValue("show_apppage_initialsetup") === null) {
+        if (getValue("show_apppage_initialsetup") === null) {
 		setValue("show_apppage_current", true);
 	}
 
@@ -1155,6 +1155,7 @@ function add_steamchart_info(appid) {
 		}
 	}
 }
+
 function add_steamspy_info(appid){
 	if (showsteamspy) {
 		get_http("https://steamwatcher.com/boiler/steamspy/steamspy.php?appid=" + appid, function (txt) {
@@ -5617,7 +5618,11 @@ self.port.on("get-prefs", function(data) {
 						add_steamreview_userscore(appid);
 						display_purchase_date();
 
-						add_widescreen_certification(appid);
+						show_regional_pricing();
+                                                add_steamchart_info(appid);
+                                                add_dlc_checkboxes();
+                                                add_app_badge_progress(appid);
+                                                add_widescreen_certification(appid);
 						add_hltb_info(appid);
 						add_steam_client_link(appid);
 						add_pcgamingwiki_link(appid);
@@ -5627,14 +5632,12 @@ self.port.on("get-prefs", function(data) {
 						add_familysharing_warning(appid);
 						add_dlc_page_link(appid);
 						add_4pack_breakdown();
-						add_steamchart_info(appid);
 						add_steamspy_info(appid);
-						add_app_badge_progress(appid);
-						add_dlc_checkboxes();
+						
+						
 						fix_achievement_icon_size();
 						add_astats_link(appid);
 
-						show_regional_pricing();
 						add_acrtag_warning();
 						add_review_toggle_button();
 
