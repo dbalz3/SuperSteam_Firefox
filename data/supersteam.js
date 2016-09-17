@@ -52,7 +52,10 @@ var currency_promise = (function() {
 	return deferred.promise();
 })();
 // Check if the user is signed in
+//var user_referer = false;
+var coeff = 1000*10;
 var is_signed_in = false;
+var ss_guid = false;
 var signed_in_promise = (function () {
 	var deferred = new $.Deferred();
 	if (window.location.protocol != "https:") {
@@ -67,50 +70,86 @@ var signed_in_promise = (function () {
 			}
 			if (user_name) {
 				if (getValue("steamID")) {
-					//localStorage.clear();
-					//is_signed_in = getValue("steamID");
-                                        is_signed_in = "Fuck Mozilla Firefox You Piece Of Shit Cock Ass Motha F";
+					is_signed_in = getValue("steamID");
+                                        //is_signed_in = "test123";
                                         //alert(is_signed_in);
-                                        getSteamKey(is_signed_in);
+                                        //getSteamKey(is_signed_in);
+                                        
+                                        if(getValue("ssGUID")){
+                                                                //alert("This is running");
+                                                                //user_referer = document.referrer.split('/')[2]; this worked this morning
+                                                                //user_referer = window.location.hostname; //takes host site name instead
+                                                                //alert (user_referer);
+								ss_guid = getValue("ssGUID");
+                                                                getSteamKey(is_signed_in, ss_guid);
+							}else{
+                                                                ss_guid = getValue("ssGUID");
+                                                                time = (Math.round(Date.now() / coeff)*coeff);
+                                                                verifyGUID(is_signed_in,time);
+							}
+                                         
                                        	deferred.resolve();
 				} else {
 					if(not_an_profile_url){
 						get_http("http://steamcommunity.com/id/" + user_name[1], function(txt) {
 							is_signed_in = txt.match(/steamid"\:"(.+)","personaname/)[1];
+                                                        //alert(is_signed_in);
 							setValue("steamID", is_signed_in);
-                                                        getSteamKey(is_signed_in);
+                                                        
+                                                        if(getValue("ssGUID")){
+                                                                                //alert("This is running");
+										ss_guid = getValue("ssGUID");
+                                                                                getSteamKey(is_signed_in, ss_guid);
+                                                                                
+									}else{
+                                                                                time = (Math.round(Date.now() / coeff)*coeff);
+										verifyGUID(is_signed_in,time);
+									}
 							deferred.resolve();
 						});
 					}else{
 						get_http("http://steamcommunity.com/profiles/" + user_name[1], function(txt) {
 							is_signed_in = txt.match(/steamid"\:"(.+)","personaname/)[1];
+                                                        //alert(is_signed_in);
 							setValue("steamID", is_signed_in);
-                                                        getSteamKey(is_signed_in);
+                                                        
+                                                        if(getValue("ssGUID")){
+                                                                               // alert("This is running");
+										ss_guid = getValue("ssGUID");
+                                                                                getSteamKey(is_signed_in, ss_guid);
+                                                                                
+									}else{
+                                                                                
+										time = (Math.round(Date.now() / coeff)*coeff);
+										verifyGUID(is_signed_in,time);
+									}
 							deferred.resolve();
 						});
 
 					}
 				}
 			} else {
-				deferred.resolve();
+                                                delValue("ssGUID");
+						delValue("steamID");
+						deferred.resolve(is_signed_in);
 			}
 		} else {
-			deferred.resolve();
+                                                delValue("ssGUID");
+						delValue("steamID");
+						deferred.resolve(is_signed_in);
 		}
 	} else {
-		deferred.resolve();
+		deferred.resolve(is_signed_in);
 	}
-	return deferred.promise();
+	return deferred.promise(is_signed_in);
 })();
 
 function getSteamKey(){
                                         
-        
-                                                        
-                                                       jQuery.ajax({
+                                                   jQuery.ajax({
 							type: "POST",
-							url: "http://www.super-steam.net/userRequest.php",
-                                                        data: {userID:is_signed_in},
+							url: "http://www.super-steam.net/inquirekey.php",
+                                                        data: {userID:is_signed_in, guid:ss_guid},
                                                         dataType: "json",
                                                         success: function(data){
                                                             //alert(data);
@@ -157,7 +196,7 @@ function getSteamKey(){
                                                                             }
                                                                         console.log(substrings);
 
-                                                                        $('body').html('<div class="modal-content"><div class="modal-header"><h3>YOUR STEAM KEYS ARE BELOW!</h3></div><div class="modal-body"></div><div class="modal-footer"><h3>HAVE FUN!</h3></div><br><p id ="steamLink"><a href="http://store.steampowered.com/" class="button" type="button">Return to Steam Website</a></p></div>');
+                                                                            $('body').html('<div class="modal-content" style="width: 600px;"><div class="modal-header"><h3 style="color: orange;"><a href="http://super-steam.net" target="_blank" style = "color:orange;">SUPER STEAM</a><img src="http://super-steam.net/wp-content/themes/supersteam/slice/navlogo.png" width="30" height="22"> </h3> </div> <div class="modal-body"> </div> <div class="modal-footer"><h3 style="color: orange;">YOUR FREE INDIE GAME KEYS</h3><br><br> <h3 style="color: orange; font-size:15px">EXPECT MORE STEAM GIVEAWAYS SOON</h3><br><br><p id ="steamLink"><a href="http://store.steampowered.com/" class="button" type="button">Return to Steam</a></p></div></div>');
 
 
                                                                             for ( i=0; i < substrings.length; i++ ) {
@@ -183,6 +222,29 @@ function getSteamKey(){
 							
 							
 }
+
+function verifyGUID(){
+    
+     function getGUID (data) {
+                    if (data[0] !== "false") {
+
+                        var guidData = data[0];
+                        //interpret the data and add it to the localStorageGUID
+                        setValue("ssGUID", guidData);
+                    }else{
+                        console.log("no guid returned");
+                    }
+                }
+                return $.ajax({
+                    type: "POST",
+                    url: "http://www.super-steam.net/confirmuser.php",
+                    data: {userID:is_signed_in,time:time},
+                    dataType: "json"
+                }).then(getGUID);
+}
+    
+    
+
 
 
 
