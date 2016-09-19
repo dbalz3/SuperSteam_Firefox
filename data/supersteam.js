@@ -5540,15 +5540,8 @@ function remove_supersteam_install_button () {
         $('#install-link').remove();
         $('.bottem-center').remove();
         $('.col-lg-2.col-md-2').remove();
-        
-        var div = document.getElementById('test');
-        var content = document.createTextNode("THANK YOU FOR INSTALLING SUPER STEAM! LOGIN TO STEAM TO SEE THE NEW FEATURES!");
-        div.appendChild(content);
-        
-        $('#test').append('       <a style="text-decoration:none;" href="http://store.steampowered.com/">STEAM WEBSITE</a>');
-        //$('.offer_txt.middle-center').html('<div class="modal-content"><div class="modal-header"><h1>You Own SuperSteam!</h1></div><div class="modal-body"><p><h3>Go to Steam, Log In, and Get Your Free Steam Key!!!</h3></p><a href="http://store.steampowered.com/" id= "steamWebsite">Steam Website</a></div><div class="modal-footer"><h1>HAVE FUN!</h1></div></div>');
-        //$('.offer_txt.middle-center').html('<div class="modal-content"><div class="modal-header"><h1>You Own SuperSteam!</h1></div><div class="modal-body"><p><h3>Go to Steam, Log In, and Get Your Free Steam Key!!!</h3></p><a href="http://store.steampowered.com/" id= "steamWebsite">Steam Website</a></div><div class="modal-footer"><h1>HAVE FUN!</h1></div></div>');
 
+		$("#super-steam-text").html("Thank you for installing Super Steam. <br>Step 1. Login to Steam <br> Step 2. Refresh the page and you will receive your keys.<br><a style='text-decoration:none;' href='http://store.steampowered.com/'>GO TO STEAM</a>");
     }
     
 function hide_age_gate(appid){
