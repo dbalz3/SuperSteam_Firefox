@@ -974,25 +974,31 @@ user agent stylesheetdiv {
 
 /* Modal Header */
 .modal-header {
-    padding: 2px 16px;
-    background-color: #5cb85c;
+    padding: 20px 16px;
+    background-color: #171a21;
     color: white;
     text-align: center;
+    /*border: 1px solid #888;*/
+    border-radius: 5px;
+    
 }
 
 /* Modal Body */
 .modal-body {
-padding: 2px 16px;
+padding: 15px 16px;
 color: black;
 
 }
 
 /* Modal Footer */
 .modal-footer {
-    padding: 2px 16px;
-    background-color: #5cb85c;
-    color: white;
+    padding: 20px 16px;
+    background-color: #171a21;
+    color: #f18422;
     text-align: center;
+    /*border: 1px solid #888;*/
+    border-radius: 5px;
+   
 }
 
 /* Modal Content */
@@ -1037,10 +1043,11 @@ color: black;
 
 /* Modal Content/Box */
 .modal-content {
-    background-color: #fefefe;
+    background-color: #1b2838;
     margin: 15% auto; /* 15% from the top and centered */
-    padding: 20px;
+    /*padding: 20px;*/
     border: 1px solid #888;
+    border-radius: 5px;
     width: 80%; /* Could be more or less, depending on screen size */
 }
 
@@ -1071,24 +1078,34 @@ color: black;
 {
     font-size: 20px;
     text-align: center;
+    color:white;
   
 }
 
 a.button:hover,
 a.button:focus {
-    color: red;
+    color: orange;
     text-decoration: none;
     cursor: pointer;
+    background: #1b2838;
 }
 
 a.button {
-    -webkit-appearance: button;
-    -moz-appearance: button;
-    appearance: button;
-    
-    height: 25px;
-    width: 200px;
+  font:16px Arial;
+  text-decoration: none;
+  background-color: #171a21;
+  color: white;
+  padding: 5px 12px 5px 12px;
+  border-top: 1px solid #888;
+  border-right: 1px solid #888;
+  border-bottom: 1px solid #888;
+  border-left: 1px solid #888;
+  border-radius: 25px;
+}
 
-    text-decoration: none;
-    color: initial;
+#descriptorText {
+    
+    margin-top: -10px;
+    position: relative;
+    top: 8px;
 }

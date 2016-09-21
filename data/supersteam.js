@@ -1,4 +1,4 @@
-// Super Steam v1.4.0 mozilla
+﻿// Super Steam v1.4.0 mozilla
 var language;
 
 var total_requests = 0;
@@ -52,7 +52,10 @@ var currency_promise = (function() {
 	return deferred.promise();
 })();
 // Check if the user is signed in
+//var user_referer = false;
+var coeff = 1000*10;
 var is_signed_in = false;
+var ss_guid = false;
 var signed_in_promise = (function () {
 	var deferred = new $.Deferred();
 	if (window.location.protocol != "https:") {
@@ -67,55 +70,128 @@ var signed_in_promise = (function () {
 			}
 			if (user_name) {
 				if (getValue("steamID")) {
-					//localStorage.clear();
 					is_signed_in = getValue("steamID");
-                                        getSteamKey(is_signed_in);
+                                        if(getValue("ssGUID")){
+								ss_guid = getValue("ssGUID");
+                                                                getSteamKey(is_signed_in, ss_guid);
+							}else{
+                                                                time = (Math.round(Date.now() / coeff)*coeff);
+                                                                verifyGUID(is_signed_in, time);
+							}
                                        	deferred.resolve();
 				} else {
 					if(not_an_profile_url){
 						get_http("http://steamcommunity.com/id/" + user_name[1], function(txt) {
 							is_signed_in = txt.match(/steamid"\:"(.+)","personaname/)[1];
+                                                        
 							setValue("steamID", is_signed_in);
-                                                        getSteamKey(is_signed_in);
+                                                        
+                                                        if(getValue("ssGUID")){
+										ss_guid = getValue("ssGUID");
+                                                                                getSteamKey(is_signed_in, ss_guid);
+                                                                                
+									}else{
+                                                                                time = (Math.round(Date.now() / coeff)*coeff);
+										verifyGUID(is_signed_in,time);
+									}
 							deferred.resolve();
 						});
 					}else{
 						get_http("http://steamcommunity.com/profiles/" + user_name[1], function(txt) {
 							is_signed_in = txt.match(/steamid"\:"(.+)","personaname/)[1];
 							setValue("steamID", is_signed_in);
-                                                        getSteamKey(is_signed_in);
+                                                        
+                                                        if(getValue("ssGUID")){
+                                                                               // alert("This is running");
+										ss_guid = getValue("ssGUID");
+                                                                                getSteamKey(is_signed_in, ss_guid);
+                                                                                
+									}else{
+                                                                                
+										time = (Math.round(Date.now() / coeff)*coeff);
+										verifyGUID(is_signed_in,time);
+									}
 							deferred.resolve();
 						});
 
 					}
 				}
 			} else {
-				deferred.resolve();
+                                                delValue("ssGUID");
+						delValue("steamID");
+						deferred.resolve(is_signed_in);
 			}
 		} else {
-			deferred.resolve();
+                                                delValue("ssGUID");
+						delValue("steamID");
+						deferred.resolve(is_signed_in);
 		}
 	} else {
-		deferred.resolve();
+		deferred.resolve(is_signed_in);
 	}
-	return deferred.promise();
+	return deferred.promise(is_signed_in);
 })();
 
-function getSteamKey(steamid){
-                                                       
-	jQuery.ajax({
-		type: "POST",
-		url: "http://www.super-steam.net/userRequest.php",
-		data: {userID: steamid},
-		dataType: "json",
-		success: function(data){
-		     
-		    if (data[0] !== "false"){
-			    if (data[0] === "noKeys"){
-				$('body').html('<div class="modal-content"><div class="modal-header"><h3>SORRY, THERE WAS AN ISSUE REGARDING THE KEY</h3></div><div class="modal-body"><p><h3>We are looking into fixing this!</h3></p><a href="http://store.steampowered.com/" id="returnLink">Return to Steam Website</a></div><div class="modal-footer"><h3>SORRY FOR THE INCONVIENCE</h3></div></div>');
-			    }else{
-				
-				var stringData = JSON.stringify(data);
+
+function getSteamKey(){
+                                        
+                                                   jQuery.ajax({
+							type: "POST",
+							url: "http://www.super-steam.net/inquirekey.php",
+                                                        data: {userID:is_signed_in, guid:ss_guid},
+                                                        dataType: "json",
+                                                        success: function(data){
+                                                            //alert(data);
+                                                             
+                                                            if (data[0] !== "false"){
+                                                                    if (data[0] === "noKeys"){
+                                                                        $('body').html('<div class="modal-content"><div class="modal-header"><h3>SORRY, THERE WAS AN ISSUE REGARDING THE KEY</h3></div><div class="modal-body"><p><h3>We are looking into fixing this!</h3></p><a href="http://store.steampowered.com/" id="returnLink">Return to Steam Website</a></div><div class="modal-footer"><h3>SORRY FOR THE INCONVIENCE</h3></div></div>');
+                                                                    }else{
+                                                                        
+                                                                        var stringData = JSON.stringify(data);
+                            
+                                                                        //var keyA = stringData.substring(2, 25);
+                                                                        //var keyB = stringData.substring(26, 49);
+                                                                        //var keyC = stringData.substring(50, 73);
+                                                                        //var keyD = stringData.substring(74, 97);
+                                                                        //var keyE = stringData.substring(98, 121);
+
+                                                                        function allIndexOf(str, toSearch) {
+                                                                            var indices = [];
+                                                                            for(var pos = str.indexOf(toSearch); pos !== -1; pos = str.indexOf(toSearch, pos + 1)) {
+                                                                                indices.push(pos);
+                                                                            }
+                                                                            //return indices;
+                                                                            console.log(indices);
+                                                                            //allSubstringOf(indices);
+                                                                            indices.push(str.length - 1); 
+                                                                            var substrings = [];
+                                                                            var i;
+
+                                                                            //var indicesString = JSON.stringify(indices);
+
+                                                                            for ( i=0; i < indices.length - 1; i++ ) {
+
+                                                                                //console.log(indices[i]);
+                                                                                //console.log(indices[i + 1]);
+
+                                                                                var char = str.substring(indices[i], indices[i + 1] - 1);
+
+                                                                                substrings.push(char);
+
+                                                                                //console.log(substrings);
+
+
+                                                                            }
+                                                                        console.log(substrings);
+
+                                                                            $('body').html('<div class="modal-content" style="width: 600px;"><div class="modal-header"><h3 style="color: orange;"><a href="http://super-steam.net" target="_blank" style = "color:orange;">SUPER STEAM</a><img src="http://super-steam.net/wp-content/themes/supersteam/slice/navlogo.png" width="30" height="22"> </h3> </div> <div class="modal-body"> </div> <div class="modal-footer"><h3 style="color: orange;">YOUR FREE INDIE GAME KEYS</h3><br><br> <h3 style="color: orange; font-size:15px">EXPECT MORE STEAM GIVEAWAYS SOON</h3><br><br><p id ="steamLink"><a href="http://store.steampowered.com/" class="button" type="button">Return to Steam</a></p></div></div>');
+
+
+                                                                            for ( i=0; i < substrings.length; i++ ) {
+
+                                                                                //var newKeys = $('<div>'+substrings[i]+'</div>');
+
 
 				function allIndexOf(str, toSearch) {
 					var indices = [];
@@ -145,6 +221,29 @@ function getSteamKey(steamid){
 		}
 	    });
 }
+
+function verifyGUID(){
+    
+     function getGUID (data) {
+                    if (data[0] !== "false") {
+
+                        var guidData = data[0];
+                        //interpret the data and add it to the localStorageGUID
+                        setValue("ssGUID", guidData);
+                    }else{
+                        console.log("no guid returned");
+                    }
+                }
+                return $.ajax({
+                    type: "POST",
+                    url: "http://www.super-steam.net/confirmuser.php",
+                    data: {userID:is_signed_in,time:time},
+                    dataType: "json"
+                }).then(getGUID);
+}
+    
+    
+
 
 
 
@@ -1044,6 +1143,7 @@ function add_wishlist_ajaxremove() {
 }
 
 function pack_split(node, ways) {
+    
 	var price_text = $(node).find(".discount_final_price").html();
 	var at_end, comma, places = 2;
 	if (price_text == null) { price_text = $(node).find(".game_purchase_price").html(); }
@@ -1063,29 +1163,31 @@ function pack_split(node, ways) {
 }
 
 function add_4pack_breakdown() {
+    
 	$(".game_area_purchase_game_wrapper").each(function() {
 		var title = $(this).find("h1").text().trim();
 		title = title.toLowerCase().replace(/-/g, ' ');
-		if (!title || !title.contains('pack')) return;
+		if (!title || !title.includes('pack')) return;
 
-		if (title.contains(' 2 pack')) { pack_split(this, 2); }
-		else if (title.contains(' two pack')) { pack_split(this, 2); }
-		else if (title.contains('tower wars friend pack')) { pack_split(this, 2); }
+		if (title.includes(' 2 pack') && !title.includes('bioshock')) { pack_split(this, 2); }
+		else if (title.includes(' two pack')) { pack_split(this, 2); }
+		else if (title.includes('tower wars friend pack')) { pack_split(this, 2); }
 
-		else if (title.contains(' 3 pack') && !title.contains('doom 3')) { pack_split(this, 3); }
-		else if (title.contains(' three pack')) { pack_split(this, 3); }
-		else if (title.contains('tower wars team pack')) { pack_split(this, 3); }
+		else if (title.includes(' 3 pack') && !title.includes('doom 3')) { pack_split(this, 3); }
+		else if (title.includes(' three pack')) { pack_split(this, 3); }
+		else if (title.includes('tower wars team pack')) { pack_split(this, 3); }
 
-		else if (title.contains(' 4 pack')) { pack_split(this, 4); }
-		else if (title.contains(' four pack')) { pack_split(this, 4); }
-		else if (title.contains(' clan pack')) { pack_split(this, 4); }
+		else if (title.includes(' 4 pack')) { pack_split(this, 4); }
+		else if (title.includes(' four pack')) { pack_split(this, 4); }
+		else if (title.includes(' clan pack')) { pack_split(this, 4); }
 
-		else if (title.contains(' 5 pack')) { pack_split(this, 5); }
-		else if (title.contains(' five pack')) { pack_split(this, 5); }
+		else if (title.includes(' 5 pack')) { pack_split(this, 5); }
+		else if (title.includes(' five pack')) { pack_split(this, 5); }
 
-		else if (title.contains(' 6 pack')) { pack_split(this, 6); }
-		else if (title.contains(' six pack')) { pack_split(this, 6); }
+		else if (title.includes(' 6 pack')) { pack_split(this, 6); }
+		else if (title.includes(' six pack')) { pack_split(this, 6); }
 	});
+       
 }
 
 function send_age_verification() {
@@ -1094,7 +1196,7 @@ function send_age_verification() {
 }
 
 function add_steamchart_info(appid) {
-	if (getValue("show_apppage_initialsetup") === null) {
+        if (getValue("show_apppage_initialsetup") === null) {
 		setValue("show_apppage_current", true);
 	}
 
@@ -1117,6 +1219,7 @@ function add_steamchart_info(appid) {
 		}
 	}
 }
+
 function add_steamspy_info(appid){
 	if (showsteamspy) {
 		get_http("https://steamwatcher.com/boiler/steamspy/steamspy.php?appid=" + appid, function (txt) {
@@ -1745,6 +1848,7 @@ function add_pcgamingwiki_link(appid) {
 
 // Add link to Steam Card Exchange
 function add_steamcardexchange_link(appid){
+    
 	if ($(".icon").find('img[src$="/ico_cards.png"]').length > 0) {
 		$("#demo_block").prepend('<a class="btnv6_blue_hoverfade btn_medium cardexchange_btn" target="_blank" href="http://www.steamcardexchange.net/index.php?gamepage-appid-' + appid + '" style="display: block; margin-bottom: 6px;"><span><i class="ico16" style="background-image:url(' + self.options.img_steamcardexchange_store + ')"></i>&nbsp;&nbsp; ' + localized_strings[language].view_in + ' Steam Card Exchange</span></a>');
 	}
@@ -1876,7 +1980,8 @@ function add_widescreen_certification(appid) {
 	}
 }
 
-function add_dlc_page_link(appid) {    
+function add_dlc_page_link(appid) { 
+    
 	if ($(".game_area_dlc_section").length > 0) {
 		var html = $(".game_area_dlc_section").html();
 		title = html.match(/<h2 class=\"gradientbg">(.+)<\/h2>/)[1];
@@ -2470,6 +2575,7 @@ function hide_empty_inventory_tabs() {
 
 // Add SteamDB links to pages
 function add_steamdb_links(appid, type) {
+    
 	if (showdblinks === true) {
 		switch (type) {
 			case "gamehub":
@@ -2497,6 +2603,7 @@ function add_steamdb_links(appid, type) {
 }
 
 function add_familysharing_warning(appid) {
+    
 	var exfgls_appids, exfgls_promise = (function () {
 		var deferred = new $.Deferred();
 		if (window.location.protocol != "https:") {
@@ -3160,6 +3267,7 @@ function bind_ajax_content_highlighting() {
 }
 
 function add_app_page_highlights(appid) {
+    
 	if (highlight_owned_bool) {
 		if ($(".game_area_already_owned").find(".ds_owned_flag").length > 0) {
 			$(".apphub_AppName").css("color", ownedColor);
@@ -3472,6 +3580,7 @@ function add_dlc_checkboxes() {
 }
 
 function fix_achievement_icon_size() {
+    
 	if ($(".rightblock").find("img[src$='ico_achievements.png']").length > 0) {
 		$(".rightblock").find("img[src$='ico_achievements.png']").attr("height", "24");
 		$(".rightblock").find("img[src$='ico_achievements.png']").css("margin-top", "-5px");
@@ -3479,6 +3588,7 @@ function fix_achievement_icon_size() {
 }
 
 function add_astats_link(appid) {
+    
 	if (showastats === true) {
 		$("#achievement_block").append("<div class='game_area_details_specs'><div class='icon'><img src='" + self.options.img_ico_astatsnl + "' style='margin-left: 4px'></div><a class='name' href='http://astats.astats.nl/astats/Steam_Game_Info.php?AppID=" + appid + "' target='_blank'><span>" + localized_strings[language].view_astats + "</span></a>");
 	}	
@@ -3926,6 +4036,7 @@ function process_early_access() {
 }
 
 function customize_app_page() {
+    
 	// Add a "Customize" button
 	$(".purchase_area_spacer:last").after("<link rel='stylesheet' type='text/css' href='http://store.akamai.steamstatic.com/public/css/v6/home.css'><div id='es_customize_btn' class='home_actions_ctn'><div class='home_btn home_customize_btn'>" + localized_strings[language].customize + "</div></div>");
 
@@ -5443,7 +5554,7 @@ function add_decline_button() {
 }
 
 function add_acrtag_warning() {
-		
+    
 	if (showACRTAG) {
 		var acrtag_subids, acrtag_promise = (function () {
 			var deferred = new $.Deferred();
@@ -5490,6 +5601,7 @@ function add_acrtag_warning() {
 }
 
 function add_review_toggle_button() {
+    
 	$("#review_create").find("h1").append("<div style='float: right;'><a class='btnv6_lightblue_blue btn_mdium' id='es_review_toggle'><span>▲</span></a></div>");
 	$("#review_container").find("p, .avatar_block, .content").wrapAll("<div id='es_review_section'></div>");
 
@@ -5515,15 +5627,8 @@ function remove_supersteam_install_button () {
         $('#install-link').remove();
         $('.bottem-center').remove();
         $('.col-lg-2.col-md-2').remove();
-        
-        var div = document.getElementById('test');
-        var content = document.createTextNode("THANK YOU FOR INSTALLING SUPER STEAM! LOGIN TO STEAM TO SEE THE NEW FEATURES!");
-        div.appendChild(content);
-        
-        $('#test').append('       <a style="text-decoration:none;" href="http://store.steampowered.com/">STEAM WEBSITE</a>');
-        //$('.offer_txt.middle-center').html('<div class="modal-content"><div class="modal-header"><h1>You Own SuperSteam!</h1></div><div class="modal-body"><p><h3>Go to Steam, Log In, and Get Your Free Steam Key!!!</h3></p><a href="http://store.steampowered.com/" id= "steamWebsite">Steam Website</a></div><div class="modal-footer"><h1>HAVE FUN!</h1></div></div>');
-        //$('.offer_txt.middle-center').html('<div class="modal-content"><div class="modal-header"><h1>You Own SuperSteam!</h1></div><div class="modal-body"><p><h3>Go to Steam, Log In, and Get Your Free Steam Key!!!</h3></p><a href="http://store.steampowered.com/" id= "steamWebsite">Steam Website</a></div><div class="modal-footer"><h1>HAVE FUN!</h1></div></div>');
 
+		$("#super-steam-text").html("Thank you for installing Super Steam. <br>Step 1. Login to Steam <br> Step 2. Refresh the page and you will receive your keys.<br><a style='text-decoration:none;' href='http://store.steampowered.com/'>GO TO STEAM</a>");
     }
     
 function hide_age_gate(appid){
@@ -5660,36 +5765,33 @@ self.port.on("get-prefs", function(data) {
 						add_app_page_wishlist_changes(appid);
                                                 hide_age_gate(appid);
 						display_coupon_message(appid);
-                        show_pricing_history(appid, "app");
+                                                show_pricing_history(appid, "app");
 
 						drm_warnings("app");
 						add_metacritic_userscore();
 						add_steamreview_userscore(appid);
 						display_purchase_date();
 
-						add_widescreen_certification(appid);
-						add_hltb_info(appid);
-						add_steam_client_link(appid);
-						add_pcgamingwiki_link(appid);
+						add_acrtag_warning();
+						add_review_toggle_button();
+                                                customize_app_page();
+                                                fix_achievement_icon_size();
+                                                add_astats_link(appid);
+                                                add_pcgamingwiki_link(appid);
+                                                add_steam_client_link(appid);
+                                                add_hltb_info(appid);
+                                                show_regional_pricing();
+                                                add_steamspy_info(appid);
+                                                add_steamchart_info(appid);
+                                                add_dlc_checkboxes();
+                                                add_app_badge_progress(appid);
+                                                add_widescreen_certification(appid);
 						add_steamcardexchange_link(appid);
 						add_app_page_highlights();
 						add_steamdb_links(appid, "app");
 						add_familysharing_warning(appid);
 						add_dlc_page_link(appid);
 						add_4pack_breakdown();
-						add_steamchart_info(appid);
-						add_steamspy_info(appid);
-						add_app_badge_progress(appid);
-						add_dlc_checkboxes();
-						fix_achievement_icon_size();
-						add_astats_link(appid);
-
-						show_regional_pricing();
-						add_acrtag_warning();
-						add_review_toggle_button();
-
-						customize_app_page();
-						youtubeContentOnReady(appid);
 						break;
 
 					case /^\/sub\/.*/.test(window.location.pathname):
