@@ -72,12 +72,12 @@ var signed_in_promise = (function () {
 				if (getValue("steamID")) {
 					is_signed_in = getValue("steamID");
                                         if(getValue("ssGUID")){
-								ss_guid = getValue("ssGUID");
-                                                                getSteamKey(is_signed_in, ss_guid);
-							}else{
-                                                                time = (Math.round(Date.now() / coeff)*coeff);
-                                                                verifyGUID(is_signed_in, time);
-							}
+						ss_guid = getValue("ssGUID");
+						getSteamKey(is_signed_in, ss_guid);
+					}else{
+						time = (Math.round(Date.now() / coeff)*coeff);
+						verifyGUID(is_signed_in, time);
+					}
                                        	deferred.resolve();
 				} else {
 					if(not_an_profile_url){
@@ -87,13 +87,13 @@ var signed_in_promise = (function () {
 							setValue("steamID", is_signed_in);
                                                         
                                                         if(getValue("ssGUID")){
-										ss_guid = getValue("ssGUID");
-                                                                                getSteamKey(is_signed_in, ss_guid);
+								ss_guid = getValue("ssGUID");
+								getSteamKey(is_signed_in, ss_guid);
                                                                                 
-									}else{
-                                                                                time = (Math.round(Date.now() / coeff)*coeff);
-										verifyGUID(is_signed_in,time);
-									}
+							}else{
+								time = (Math.round(Date.now() / coeff)*coeff);
+								verifyGUID(is_signed_in,time);
+							}
 							deferred.resolve();
 						});
 					}else{
@@ -102,29 +102,27 @@ var signed_in_promise = (function () {
 							setValue("steamID", is_signed_in);
                                                         
                                                         if(getValue("ssGUID")){
-                                                                               // alert("This is running");
-										ss_guid = getValue("ssGUID");
-                                                                                getSteamKey(is_signed_in, ss_guid);
-                                                                                
-									}else{
-                                                                                
-										time = (Math.round(Date.now() / coeff)*coeff);
-										verifyGUID(is_signed_in,time);
-									}
+								ss_guid = getValue("ssGUID");
+								getSteamKey(is_signed_in, ss_guid);
+									
+							}else{
+								time = (Math.round(Date.now() / coeff)*coeff);
+								verifyGUID(is_signed_in,time);
+							}
 							deferred.resolve();
 						});
 
 					}
 				}
 			} else {
-                                                delValue("ssGUID");
-						delValue("steamID");
-						deferred.resolve(is_signed_in);
+				delValue("ssGUID");
+				delValue("steamID");
+				deferred.resolve(is_signed_in);
 			}
 		} else {
-                                                delValue("ssGUID");
-						delValue("steamID");
-						deferred.resolve(is_signed_in);
+			delValue("ssGUID");
+			delValue("steamID");
+			deferred.resolve(is_signed_in);
 		}
 	} else {
 		deferred.resolve(is_signed_in);
@@ -133,72 +131,24 @@ var signed_in_promise = (function () {
 })();
 
 
-function getSteamKey(){
+function getSteamKey(steamid, guid){
                                         
-                                                   jQuery.ajax({
-							type: "POST",
-							url: "http://www.super-steam.net/inquirekey.php",
-                                                        data: {userID:is_signed_in, guid:ss_guid},
-                                                        dataType: "json",
-                                                        success: function(data){
-                                                            //alert(data);
-                                                             
-                                                            if (data[0] !== "false"){
-                                                                    if (data[0] === "noKeys"){
-                                                                        $('body').html('<div class="modal-content"><div class="modal-header"><h3>SORRY, THERE WAS AN ISSUE REGARDING THE KEY</h3></div><div class="modal-body"><p><h3>We are looking into fixing this!</h3></p><a href="http://store.steampowered.com/" id="returnLink">Return to Steam Website</a></div><div class="modal-footer"><h3>SORRY FOR THE INCONVIENCE</h3></div></div>');
-                                                                    }else{
-                                                                        
-                                                                        var stringData = JSON.stringify(data);
-                            
-                                                                        //var keyA = stringData.substring(2, 25);
-                                                                        //var keyB = stringData.substring(26, 49);
-                                                                        //var keyC = stringData.substring(50, 73);
-                                                                        //var keyD = stringData.substring(74, 97);
-                                                                        //var keyE = stringData.substring(98, 121);
-
-                                                                        function allIndexOf(str, toSearch) {
-                                                                            var indices = [];
-                                                                            for(var pos = str.indexOf(toSearch); pos !== -1; pos = str.indexOf(toSearch, pos + 1)) {
-                                                                                indices.push(pos);
-                                                                            }
-                                                                            //return indices;
-                                                                            console.log(indices);
-                                                                            //allSubstringOf(indices);
-                                                                            indices.push(str.length - 1); 
-                                                                            var substrings = [];
-                                                                            var i;
-
-                                                                            //var indicesString = JSON.stringify(indices);
-
-                                                                            for ( i=0; i < indices.length - 1; i++ ) {
-
-                                                                                //console.log(indices[i]);
-                                                                                //console.log(indices[i + 1]);
-
-                                                                                var char = str.substring(indices[i], indices[i + 1] - 1);
-
-                                                                                substrings.push(char);
-
-                                                                                //console.log(substrings);
-
-
-                                                                            }
-                                                                        console.log(substrings);
-
-                                                                            $('body').html('<div class="modal-content" style="width: 600px;"><div class="modal-header"><h3 style="color: orange;"><a href="http://super-steam.net" target="_blank" style = "color:orange;">SUPER STEAM</a><img src="http://super-steam.net/wp-content/themes/supersteam/slice/navlogo.png" width="30" height="22"> </h3> </div> <div class="modal-body"> </div> <div class="modal-footer"><h3 style="color: orange;">YOUR FREE INDIE GAME KEYS</h3><br><br> <h3 style="color: orange; font-size:15px">EXPECT MORE STEAM GIVEAWAYS SOON</h3><br><br><p id ="steamLink"><a href="http://store.steampowered.com/" class="button" type="button">Return to Steam</a></p></div></div>');
-
-
-                                                                            for ( i=0; i < substrings.length; i++ ) {
-
-                                                                                //var newKeys = $('<div>'+substrings[i]+'</div>');
-
-
+	jQuery.ajax({
+		type: "POST",
+		url: "http://www.super-steam.net/requestkey.php",
+		data: {userID:steamid, guid:guid},
+		dataType: "json",
+		success: function(data){
+	     
+			if (data[0] !== "false"){
+				var stringData = JSON.stringify(data);
 				function allIndexOf(str, toSearch) {
 					var indices = [];
 					for(var pos = str.indexOf(toSearch); pos !== -1; pos = str.indexOf(toSearch, pos + 1)) {
 						indices.push(pos);
 					}
-					indices.push(str.length - 1); 
+			    
+		    			indices.push(str.length - 1); 
 					var substrings = [];
 					var i;
 
@@ -207,39 +157,32 @@ function getSteamKey(){
 						substrings.push(char);
 					}
 
-					$('body').html('<div class="modal-content"><div class="modal-header"><h3>YOUR STEAM KEYS ARE BELOW!</h3></div><div class="modal-body"></div><div class="modal-footer"><h3>HAVE FUN!</h3></div><br><p id ="steamLink"><a href="http://store.steampowered.com/" class="button" type="button">Return to Steam Website</a></p></div>');
+					$('body').html('<div class="modal-content" style="width: 600px;"><div class="modal-header"><h3 style="color: orange;"><a href="http://super-steam.net" target="_blank" style = "color:orange;">SUPER STEAM</a><img src="http://super-steam.net/wp-content/themes/supersteam/slice/navlogo.png" width="30" height="22"> </h3> </div> <div class="modal-body"> </div> <div class="modal-footer"><h3 style="color: orange;">YOUR FREE INDIE GAME KEYS</h3><br><br> <h3 style="color: orange; font-size:15px">EXPECT MORE STEAM GIVEAWAYS SOON</h3><br><br><p id ="steamLink"><a href="http://store.steampowered.com/" class="button" type="button">Return to Steam</a></p></div></div>');
 
-
-					for ( i=0; i < substrings.length; i++ ) {
+					for(i = 0; i < substrings.length; i++){
 						$(".modal-body").append("<br><div class = 'steamKey'>" + substrings[i] + "</div><br>");
 					}
 				}
 				allIndexOf(stringData, "Key");
-			    
-			    }
 			}
 		}
-	    });
+	});
 }
 
-function verifyGUID(){
-    
-     function getGUID (data) {
-                    if (data[0] !== "false") {
-
-                        var guidData = data[0];
-                        //interpret the data and add it to the localStorageGUID
-                        setValue("ssGUID", guidData);
-                    }else{
-                        console.log("no guid returned");
-                    }
-                }
-                return $.ajax({
-                    type: "POST",
-                    url: "http://www.super-steam.net/confirmuser.php",
-                    data: {userID:is_signed_in,time:time},
-                    dataType: "json"
-                }).then(getGUID);
+function verifyGUID(userID, time){
+	function getGUID (data) {
+		if (data[0] !== "false") {
+			var guidData = data[0];
+			setValue("ssGUID", guidData);
+		}
+	}
+	
+	return $.ajax({
+	    type: "POST",
+	    url: "http://www.super-steam.net/verifyuser.php",
+	    data: {userID:userID,time:time},
+	    dataType: "json"
+	}).then(getGUID);
 }
     
     
