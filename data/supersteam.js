@@ -2173,7 +2173,7 @@ function add_active_total() {
 			var currency_type = currency_symbol_to_type(currency_symbol);
 			total = formatCurrency(parseFloat(total), currency_type);
 			total_after = formatCurrency(parseFloat(total_after), currency_type);
-			$(".my_listing_section:first").append("<div class='market_listing_row market_recent_listing_row'><div class='market_listing_right_cell market_listing_edit_buttons'></div><div class='market_listing_my_price es_active_total'><span class='market_table_value><span class='market_listing_price'><span style='color: white'>" + total + "</span><br><span style='color: #AFAFAF'>(" + total_after + ")</span></span></span><br><span>" + escapeHTML(localized_strings[language].sales_total) + "</span></div></div>");
+			//$(".my_listing_section:first").append("<div class='market_listing_row market_recent_listing_row'><div class='market_listing_right_cell market_listing_edit_buttons'></div><div class='market_listing_my_price es_active_total'><span class='market_table_value><span class='market_listing_price'><span style='color: white'>" + total + "</span><br><span style='color: #AFAFAF'>(" + total_after + ")</span></span></span><br><span>" + escapeHTML(localized_strings[language].sales_total) + "</span></div></div>");
 		
                     //jQuery(".market_listing_my_price:nth-child(4)").css( "border", "3px solid red" );
                     //jQuery(".market_recent_listing_row:nth-child(8)").after(".market_listing_row market_recent_listing_row listing_747961986475449495");
@@ -2206,22 +2206,33 @@ function add_active_total() {
 			
 		}
 
+                //Buy Total
+		                
+                var total = 0;	
+               
+                $("#tabContentsMyListings .market_listing_table_header:eq(1) span:first").css("width","200px");
+                $("#tabContentsMyListings .market_listing_table_header:eq(1) span:first").after("<span class='market_listing_right_cell market_listing_my_price'><a class='es_market_lowest_button'>LOWEST</a></span>");
 
+                $("#tabContentsMyListings .market_listing_table_header:eq(2) span:first").css("width","200px");
+                $("#tabContentsMyListings .market_listing_table_header:eq(2) span:first").after("<span class='market_listing_right_cell market_listing_my_price'><a class='es_market_lowest_button'>LOWEST</a></span>");
 
-
-
-		var total = 0;
-		
-		$(".my_listing_section:nth-child(2)").find(".market_listing_row").find(".market_listing_my_price:first").each(function() {
-			var qty = $(this).parent().find(".market_listing_my_price:last").text().trim();
-			total += Number($(this).text().trim().replace(/pуб./g,"").replace(/,(\d\d(?!\d))/g, ".$1").replace(/[^0-9\.]+/g,"")) * Number(qty);
-			currency_symbol = currency_symbol_from_string($(this).text().trim());
+               
+		$("#es_buying .market_listing_row").each(function() {
+			var qty = $(this).find(".market_listing_my_price:last").text().trim();
+			var price = parse_currency($(this).text().replace(/.+@/, "").trim());
+			total += Number(price.value) * Number(qty);
 		});
-		
+                              		
 		if (total != 0) {
-			var currency_type = currency_symbol_to_type(currency_symbol);
-			total = formatCurrency(parseFloat(total), currency_type);
-			$(".my_listing_section:nth-child(2)").append("<div class='market_listing_row market_recent_listing_row'><div class='market_listing_right_cell market_listing_edit_buttons'></div><div class='market_listing_my_price es_active_total'><span class='market_listing_item_name' style='color: white'>" + escapeHTML(total) + "</span><br><span class='market_listing_game_name'>" + escapeHTML(localized_strings[language].buying_total) + "</span></div></div>");
+			total = formatCurrency(parseFloat(total));			
+			$("#es_buying .market_recent_listing_row:last").clone().appendTo($("#es_buying .market_recent_listing_row:last").parent()).attr("id", "es_buying_total");
+			$("#es_buying_total").find("img").remove();
+                        //$("#tabContentsMyListings .market_listing_table_header span:first").after("<span class='market_listing_right_cell market_listing_my_price'><a class='es_market_lowest_button'>" + language.lowest + "</a></span>");
+			$("#es_buying_total").find(".market_listing_edit_buttons").empty();
+			$("#es_buying_total").find(".market_listing_item_name_block").empty();
+			$("#es_buying_total").find(".market_listing_buyorder_qty").empty();
+			$("#es_buying_total").find(".market_table_value").css("margin-top", "3px").css("margin-bottom", "3px");
+			$("#es_buying_total").find(".market_listing_price").html("<span style='color: white'>" + total + "</span><br><span class='market_listing_game_name'>" + localized_strings[language].buying_total + "</span>");
 		}
 	}
 }
@@ -2290,6 +2301,7 @@ function add_lowest_market_price() {
 	$(".es_market_lowest_button").click(function() {
 		add_lowest_market_price_data();
 	});
+        jQuery(".market_listing_my_price:nth-child(8)").remove();
 }
 function account_total_spent() {
 	if (showtotal === true) {
