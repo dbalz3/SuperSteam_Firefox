@@ -409,6 +409,7 @@ img.platform_small, .platform_img {
 	box-shadow: 5px 5px 5px rgba(0,0,0,0.8);
 	border:1px solid black;
 	margin-top:-25px;
+        width: 30%;
 }
 .es_regional_price {
 	margin-right:8px;
