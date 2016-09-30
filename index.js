@@ -15,7 +15,7 @@ pageMod.PageMod({
     
     contentScriptWhen: 'ready',
     contentStyleFile:  [data.url("supersteam.css"), data.url("es_flags.css")],
-    contentScriptFile: [data.url("jquery-1.12.1.min.js"), data.url("localization.js"), data.url("supersteam.js")],
+    contentScriptFile: [data.url("jquery-3.1.1.min.js"), data.url("localization.js"), data.url("supersteam.js")],
 
     onAttach: function(worker) {
         worker.port.emit('get-prefs', [ 
