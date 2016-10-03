@@ -1,4 +1,4 @@
-﻿// Super Steam v1.6.0 mozilla
+﻿// Super Steam v1.7.0 mozilla
 var language;
 
 var total_requests = 0;
