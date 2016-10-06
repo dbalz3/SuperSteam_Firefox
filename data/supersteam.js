@@ -4755,7 +4755,7 @@ function add_badge_filter() {
 	if (window.location.href.match(/\/$/) || window.location.href.match(/p\=1$/)) {
 		var filter_done = false;
 
-		if ( $(".profile_small_header_texture a")[0].href == $(".user_avatar a")[0].href) {
+		if ( $(".profile_small_header_texture a")[0].href == $(".playerAvatar:first a")[0].href.replace(/\/$/, "")) {
 			var html  = "<div style='text-align: right;'><span>" + localized_strings[language].show + ": </span>";
 				html += "<label class='badge_sort_option whiteLink es_badges' id='es_badge_all'><input type='radio' name='es_badge_sort' checked><span>" + localized_strings[language].badges_all + "</span></label>";
 				html += "<label class='badge_sort_option whiteLink es_badges' id='es_badge_drops'><input type='radio' name='es_badge_sort'><span>" + localized_strings[language].badges_drops + "</span></label>";
