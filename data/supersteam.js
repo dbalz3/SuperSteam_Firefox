@@ -5220,8 +5220,9 @@ function add_gamecard_market_links(game) {
 }
 
 function add_badge_completion_cost() {
+        
 	if ( $(".profile_small_header_texture :first a")[0].href == $(".playerAvatar:first a")[0].href.replace(/\/$/, "").replace(/\/$/, "")) {
-		$(".profile_xp_block_right").append("<div id='profile_badges_sortoptions'></div>");
+		$(".profile_xp_block").append("<div id='es_cards_worth'></div>");
 		get_http("http://store.steampowered.com/app/220/", function(txt) {
 			var currency_symbol = currency_symbol_from_string($(txt).find(".price, .discount_final_price").text().trim());
 			var currency_type = currency_symbol_to_type(currency_symbol);
@@ -5231,7 +5232,8 @@ function add_badge_completion_cost() {
 				var foil = $(this).find("a:last").attr("href").match(/\?border=1/);
 				var node = $(this);
 				if (game) {
-					var url = "https://steamwatcher.com/boiler/martketdata/averagecardprice.php?appid=" + game[1] + "&cur=" + currency_type.toLowerCase();
+                                    //alert("this is being called");
+					var url = "https://steamwatcher.com/boiler/marketdata/averagecardprice.php?appid=" + game[1] + "&cur=" + currency_type.toLowerCase();
 					if (foil) { url = url + "&foil=true"; }
 					get_http(url, function(txt) {
 						if ($(node).find("div[class$='badge_progress_info']").text()) {
@@ -5263,9 +5265,12 @@ function add_badge_completion_cost() {
 						$(node).find(".badge_empty_right").css("margin-top", "7px");
 						$(node).find(".gamecard_badge_progress .badge_info").css("width", "296px");
 
-						if ($(".pagebtn").length < 0 && total_worth > 0) {
+                                                $("#es_cards_worth").text(localized_strings[language].drops_worth_avg + " " + worth_formatted);
+                                           /*	
+                                                if ($(".pagebtn").length < 0 && total_worth > 0) {
 							$("#es_cards_worth").text(localized_strings[language].drops_worth_avg + " " + worth_formatted);
 						}
+                                            */
 					});
 				}
 			});
