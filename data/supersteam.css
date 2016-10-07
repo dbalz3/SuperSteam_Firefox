@@ -700,7 +700,7 @@ user agent stylesheetdiv {
 	float: right;
 	width: 280px;
 	text-align: center;
-	margin-right: 0px;
+	margin-right: -30px;
 	color: #fff;
 }
 .es_active_total {

@@ -5229,29 +5229,37 @@ function add_badge_completion_cost() {
 			var cur, total_worth = 0, count = 0;
 			$(".badge_row").each(function() {
 				var game = $(this).find(".badge_row_overlay").attr("href").match(/\/(\d+)\//);
+
 				var foil = $(this).find("a:last").attr("href").match(/\?border=1/);
 				var node = $(this);
 				if (game) {
+                                    
+                                                var indexForGamecardString = game.input.indexOf("/gamecards/")+11;
+						var appid = game.input.slice(indexForGamecardString);
+						var gameid = appid.replace("/","");
                                     //alert("this is being called");
-					var url = "https://steamwatcher.com/boiler/marketdata/averagecardprice.php?appid=" + game[1] + "&cur=" + currency_type.toLowerCase();
+					var url = "https://steamwatcher.com/boiler/marketdata/averagecardprice.php?appid=" + gameid + "&cur=" + currency_type.toLowerCase();
 					if (foil) { url = url + "&foil=true"; }
 					get_http(url, function(txt) {
+                                                        var jsonString = JSON.stringify(txt)
+							var parsedTxt = JSON.parse(jsonString);
 						if ($(node).find("div[class$='badge_progress_info']").text()) {
 							var card = $(node).find("div[class$='badge_progress_info']").text().trim().match(/(\d+)\D*(\d+)/);
 							if (card) { var need = card[2] - card[1]; }
 						}
 
-						var cost = (need * parseFloat(txt)).toFixed(2);
-
+						var cost = (need * parseFloat(parsedTxt)).toFixed(2);
+                                                
+                                       
 						if ($(node).find(".progress_info_bold").text()) {
 							var drops = $(node).find(".progress_info_bold").text().match(/\d+/);
-							if (drops) { var worth = (drops[0] * parseFloat(txt)).toFixed(2); }
-						}
+							if (drops) { var worth = (drops[0] * parseFloat(parsedTxt)).toFixed(2);}
+                                                }
 
 						if (worth > 0) {
 							total_worth = total_worth + parseFloat(worth);
 						}
-
+                                               
 						cost = formatCurrency(cost, currency_type);
 						card = formatCurrency(worth, currency_type);
 						worth_formatted = formatCurrency(total_worth, currency_type);
@@ -5286,13 +5294,14 @@ function add_total_drops_count() {
 			game_tiles = [];
 
 		function add_total_drops_count_calculations(games) {
-			$(games).each(function(i, obj) {
-				var obj_count = obj.find(".progress_info_bold")[0].innerHTML.match(/\d+/);
-				if (obj_count) {
-					drops_count += parseInt(obj_count[0]);
-					drops_games = drops_games + 1;
-				}
-			});
+                        $(".badge_title_stats_drops").find(".progress_info_bold").each(function(i, node) {
+						var count = $(node).text().match(/(\d+)/);
+
+						if (count) {
+							drops_games = drops_games + 1;
+							drops_count += +count[1];
+						}
+					});
 
 			$(".profile_xp_block_right").html("<span id='es_calculations' style='color: #fff;'>" + localized_strings[language].card_drops_remaining.replace("__drops__", drops_count) + "<br>" + localized_strings[language].games_with_drops.replace("__dropsgames__", drops_games) + "</span>");
 
@@ -5355,6 +5364,7 @@ function add_total_drops_count() {
 				});
 			}
 		} else {
+                        $(".profile_xp_block_right").prepend("<span id='es_calculations' style='color: #fff;'>" + localized_strings[language].drop_calc + "</span>");
 			$(".progress_info_bold").each(function(i, obj) {
 				var parent = $(obj).parent().parent();
 				if (parent.html().trim().match(/^<div class="badge_title_stats">/)) {
