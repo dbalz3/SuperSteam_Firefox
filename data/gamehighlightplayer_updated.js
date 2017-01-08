@@ -1,4 +1,4 @@
-//This file is a substitute to the original gamehighlighplayer.js developed by Valve. It adds youtube playing functionality and fixes some not obvious behaviours. 
+//This file is a substitute to the original gamehighlighplayer.js developed by Valve. It adds youtube playing functionality and fixes some not obvious behaviours.
 var g_player = null;
 var y_players = {};
 
@@ -38,9 +38,9 @@ function BIsUserGameHDEnabled()
 {
 	//the cookie is stored as the inverse
 	var rgMatches = document.cookie.match( /(^|; )bGameHDDisabled=([^;]*)/ );
-	
+
 	if (!rgMatches) return false
-	
+
 	return !( rgMatches && rgMatches[2] == "true" );
 }
 
@@ -118,7 +118,7 @@ function HighlightPlayer( args )
          }
     }
 
-	
+
 	//make all the strip items clickable
 	var thisClosure = this;
 	this.m_elemStrip.find( '.highlight_strip_item' ).each(
@@ -172,7 +172,7 @@ function HighlightPlayer( args )
 	{
 		firstItem = this.m_elemPlayerArea.find( '.highlight_screenshot').first();
 	}
-	
+
 	this.HighlightItem( firstItem );
 
 	RegisterSteamOnWebPanelShownHandler( $J.proxy( this.OnWebPanelShown, this ) );
@@ -280,13 +280,13 @@ HighlightPlayer.prototype.LoadHTML5Movie = function( id, bUserAction )
 	if( $Target.length > 0 && $Target[0].play )
 	{
 		bIsHD = BIsUserGameHDEnabled()
-	
+
 		if(bIsHD)
 		{
 			$Target[0].setAttribute('data-default-src', $Target[0].src);
 			$Target[0].src = $Target[0].getAttribute('data-hd-src');
 		}
-		
+
 		$Target[0].load();
 		$Target[0].play();
 
@@ -429,9 +429,9 @@ HighlightPlayer.prototype.TransitionTo = function( elem, bSkipAnimation )
 					//if(yPlayer.getPlayerState()== YT.PlayerState.PLAYING || yPlayer.getPlayerState()== YT.PlayerState.BUFFERING)
 					//	yPlayer.pauseVideo()
 					callPlayer(yPlayer, 'pauseVideo')
-						
+
 					//var flVolume = yPlayer.getVolume();
-			
+
 					//SetGameHighlightPlayerVolume(flVolume);
 					//SetGameHighlightAudioEnabled( !yPlayer.isMuted() )
 				} catch(e) {}
@@ -1025,12 +1025,12 @@ HighlightPlayer.prototype.ShowScreenshotPopup = function( screenshotid )
 			{
 				$('.play_button',overlay).removeClass('play');
 				$('.play_button',overlay).addClass('pause');
-				
+
 				if( BIsUserGameHDEnabled() )
 				{
 					$('.hd_checkbox',overlay).addClass("checked");
 				}
-				
+
 				updateVolume();
 			}
 
@@ -1149,8 +1149,8 @@ HighlightPlayer.prototype.ShowScreenshotPopup = function( screenshotid )
 					$('.hd_checkbox',overlay).addClass("checked");
 				else
 					$('.hd_checkbox',overlay).removeClass("checked");
-					
-					
+
+
 				var videoPosition = videoControl.currentTime;
 				videoControl.pause();
 				videoControl.preload = "metadata";
@@ -1160,7 +1160,7 @@ HighlightPlayer.prototype.ShowScreenshotPopup = function( screenshotid )
 					this.currentTime = videoPosition;
 					videoControl.play();
 					$(videoControl).unbind('loadedmetadata')
-				});	
+				});
 				if( bIsHD )
 				{
 					// Switch to HD video
@@ -1174,9 +1174,9 @@ HighlightPlayer.prototype.ShowScreenshotPopup = function( screenshotid )
 					videoControl.src = $(videoControl).data('default-src');
 					videoControl.load();
 				}
-					
-			}			
-			
+
+			}
+
 			setup();
 			hide();
 		});

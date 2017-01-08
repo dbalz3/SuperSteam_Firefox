@@ -11,14 +11,14 @@ prefSet.on("wishlistColorDefault", function() {
 })
 
 pageMod.PageMod({
-    include: ["*.steampowered.com", "*.steamcommunity.com", "*.super-steam.net"], 
-    
+    include: ["*.steampowered.com", "*.steamcommunity.com", "*.super-steam.net"],
+
     contentScriptWhen: 'ready',
     contentStyleFile:  [data.url("supersteam.css"), data.url("es_flags.css")],
     contentScriptFile: [data.url("jquery-3.1.1.min.js"), data.url("localization.js"), data.url("supersteam.js")],
 
     onAttach: function(worker) {
-        worker.port.emit('get-prefs', [ 
+        worker.port.emit('get-prefs', [
             prefSet.prefs.ownedColor,
             prefSet.prefs.wishlistColor,
             prefSet.prefs.hideInstallSteam,
