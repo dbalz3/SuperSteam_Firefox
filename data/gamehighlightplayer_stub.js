@@ -1,4 +1,4 @@
-//This file is purely a simple hack to prevent HighlightPlayer from first initialisation. It's just stub and flow stop preventer. 
+//This file is purely a simple hack to prevent HighlightPlayer from first initialisation. It's just stub and flow stop preventer.
 
 function HighlightPlayer( args )
 {

@@ -18,26 +18,26 @@ $.ajax({
 	url: "//www.fairsteam.com/app/"+app_id+"?api_version=2",
 	dataType: 'json',
     timeout: 5000,
-	success: function(data){ 
+	success: function(data){
 		var formated_array = new Object();
 		var thumb_data = new Object();
         var channel_data = new Object();
 
 		if (!data['data']) return
-		
+
 		videos = data['data']['videos']
 		rating_change = data['data']['rating_change']
-		
+
 		if(videos && videos.length>0)
 		{
 			for (var i = videos.length; i--;) {
 				var item = videos[i];
-				
+
 				formated_array['yv_'+item.yid] = item.yid
 				thumb_data['yv_'+item.yid] = item.thumb
 				channel_data['yv_'+item.yid] = item.channel
 			}
-			
+
 			for(key in thumb_data) {
 				var channel_name = channel_data[key].length > 17 ? channel_data[key].substring(0,14)+"..." : channel_data[key];
 
@@ -46,9 +46,9 @@ $.ajax({
 					'<div class="highlight_youtube_marker"></div>'+
 					'<div class="highlight_channel_marker">'+channel_name+'</div>'+
 				'</div>'
-				
+
 				$('.highlight_selector').after(highlight_strip_youtube);
-			
+
 				highlight_youtube = '<div style="display: none;" class="highlight_player_item highlight_youtube tall" id="highlight_youtube_'+key+'">'+
 							'<div id="youtube_'+key+'"/>'+
 
@@ -56,9 +56,9 @@ $.ajax({
 
 				$('.highlight_player_area_spacer').after(highlight_youtube);
 			}
-			
+
 			$('#highlight_strip_scroll').width($('#highlight_strip_scroll').width() + Object.keys(formated_array).length*120)
-			
+
 			var youtubeUrlCode = 'var rgYoutubeURLs = ' + JSON.stringify(formated_array); + ';';
 
 			var script = document.createElement('script');
@@ -68,8 +68,8 @@ $.ajax({
 		}
 	},
 	error: function(data) {
-		console.log('Cant reach api server'); 
-		
+		console.log('Cant reach api server');
+
 		//chrome.runtime.sendMessage({action: "gaPageFailure"})
 	},
 	complete: function(data) {
